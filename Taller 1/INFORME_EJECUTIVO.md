@@ -50,6 +50,11 @@ Y las analizamos con las características que se conocen **al firmar**: valor, m
 La idea es sencilla: al firmar un contrato, sumar señales de riesgo. Entre más señales, más prioridad de
 seguimiento. Ordenados de mayor a menor capacidad de discriminar:
 
+**Los factores que sugiere el enunciado, y cómo los usamos:** el **valor** y la **modalidad** entran en el triage
+de contratos (más abajo); el **destino del gasto** y el **tipo de contrato** lo afinan; y el **sector** —junto con
+el orden de la entidad— es un criterio a nivel de entidad para priorizar la revisión de la liquidación. Todos
+salen de los datos (notebooks `01`–`03`).
+
 ### Prioridad **ALTA**: el perfil que más se desvía
 Combinando las señales que sí sirven para elegir (pedir plazo o no ejecutar presupuesto), el grupo de mayor
 riesgo es claro:
@@ -78,9 +83,15 @@ Aunque un contrato no caiga en el perfil de arriba, estas señales por sí solas
 - **El tamaño del proveedor (PyME/no PyME).** No distingue a los que se desvían: priorizar por ahí sería gastar
   esfuerzo sin ganar precisión.
 
-### Aparte del triage: una alerta de proceso
-La **no-liquidación** (59% de los cerrados) no sirve para elegir contratos, pero sí marca **dónde** hay un
-problema sistémico de cierre: **sector Salud** y **entidades territoriales**. Recomendación a nivel de gestión: revisar y reforzar el proceso de liquidación en esos frentes.
+### Criterio por sector y orden: dónde auditar la liquidación
+El **sector** y el **orden de la entidad** también son criterios de focalización, pero apuntan a otra desviación
+—la no-liquidación— y a otro nivel: no a "vigilar este contrato", sino a **dónde poner la lupa como entidad**.
+Como la no-liquidación es masiva (59% de los cerrados), no distingue contratos uno a uno; lo que sí hace es
+señalar con claridad **qué entidades revisar**: las de **sector Salud** (~78% sin liquidar) y las de **orden
+territorial** (~67% vs ~54% en las nacionales).
+
+> **Criterio:** priorizar la auditoría del proceso de liquidación en las **entidades territoriales** y en los
+> **sectores con peor cumplimiento** (Salud a la cabeza).
 
 ![No-liquidación por sector y orden](figs/03_h4_sector_orden.png)
 
@@ -120,7 +131,7 @@ Somos honestos sobre hasta dónde llega este análisis:
 Con un equipo pequeño, la mejor apuesta es concentrar la supervisión en el **perfil de alto riesgo**
 (suministros de funcionamiento en modalidades de mayor cuantía, y contratos de valor alto), usar las **señales
 individuales** para afinar, y **no** gastar esfuerzo en criterios que no discriminan (como el tamaño del
-proveedor). En paralelo, tratar la **no-liquidación** como lo que es: un problema de proceso a corregir en Salud
-y en las entidades territoriales.
+proveedor). En paralelo, y a nivel de entidad, **priorizar la auditoría de la liquidación** en el sector Salud y
+en las entidades territoriales, que es donde se concentra ese problema de proceso.
 
 > El detalle metodológico, las pruebas estadísticas y las figuras están en los notebooks `01`, `02` y `03`.
