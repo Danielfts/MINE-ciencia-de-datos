@@ -44,6 +44,7 @@ deben identificarse y tratarse de forma justificada.
 ```
 Taller 1/
 ├── Taller 1.pdf                    # Enunciado original
+├── INFORME_EJECUTIVO.md            # Entregable 4: criterios de focalización + limitaciones
 ├── PLAN.md                         # Planeación y estado de avance
 ├── data/
 │   ├── raw/                        # Dataset original sin procesar (ignorado por git)
@@ -66,8 +67,21 @@ Taller 1/
    2. `notebooks/02_limpieza.ipynb` → genera `data/processed/secop_bienes_limpio.parquet`
    3. `notebooks/03_analisis.ipynb`
 
+4. Leer el **[informe ejecutivo](INFORME_EJECUTIVO.md)** (Entregable 4) con las conclusiones y recomendaciones.
+
 Dependencias en `requirements.txt` / `environment.yml` (raíz del repo).
 
-> **Estado:** completos los notebooks 01 (entendimiento), 02 (limpieza + banderas) y 03 (análisis:
-> 8 hipótesis contrastadas + segmentos de alto riesgo + visualización). Pendiente el informe ejecutivo (Entregable 4).
-> Ver `PLAN.md`.
+## Conclusiones (insights)
+
+- El **valor** del contrato anticipa riesgo, pero en dirección distinta según la desviación: los grandes piden
+  más plazo y ejecutan menos; los pequeños se cierran sin liquidar.
+- La **modalidad** predice las adiciones de plazo (licitación ~20% vs mínima cuantía ~5%).
+- El **tipo de contrato** marca la no-ejecución (suministros ~13% vs compraventa ~2%).
+- La **no-liquidación** es masiva (~59%): no sirve para triage, sí como alerta de proceso en Salud y entidades
+  territoriales.
+- El **tamaño del proveedor (PyME)** no discrimina: no conviene usarlo como criterio.
+- **Perfil de mayor riesgo:** suministros de funcionamiento en modalidades de mayor cuantía (~2× el promedio).
+
+Detalle y recomendaciones priorizadas en el **[informe ejecutivo](INFORME_EJECUTIVO.md)**.
+
+> **Estado:** completos los cuatro entregables (notebooks 01–03 + informe ejecutivo). Ver `PLAN.md`.
