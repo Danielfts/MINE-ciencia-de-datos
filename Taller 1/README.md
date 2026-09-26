@@ -1,5 +1,7 @@
 # Taller 1 — Supervisión de Contratación Pública de Bienes
 
+**Integrantes:** Daniel Triviño · Nicolás Bedoya
+
 **Dataset:** [Contratos de bienes SECOP II (2019-2025)](https://drive.google.com/file/d/1R0pSXh2bgCoPKcXlAlafdavVwvzZX6AQ/view)
 
 ## Enunciado
