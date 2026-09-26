@@ -67,5 +67,5 @@ Taller 1/
 Dependencias en `requirements.txt` / `environment.yml` (raíz del repo).
 
 > **Estado:** completos los notebooks 01 (entendimiento), 02 (limpieza + banderas) y 03 (análisis:
-> 12 hipótesis contrastadas + visualización multivariada). Pendiente el informe ejecutivo (Entregable 4).
+> 8 hipótesis contrastadas + segmentos de alto riesgo + visualización). Pendiente el informe ejecutivo (Entregable 4).
 > Ver `PLAN.md`.
