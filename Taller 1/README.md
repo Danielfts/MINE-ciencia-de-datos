@@ -41,10 +41,30 @@ deben identificarse y tratarse de forma justificada.
 
 ```
 Taller 1/
-├── Taller 1.pdf       # Enunciado original
+├── Taller 1.pdf                    # Enunciado original
+├── PLAN.md                         # Planeación y estado de avance
 ├── data/
-│   ├── raw/           # Dataset original sin procesar (ignorado por git)
-│   └── processed/     # Datos limpios/derivados (ignorado por git)
-├── notebooks/         # Notebooks de análisis (ejecutar en orden numerado)
+│   ├── raw/                        # Dataset original sin procesar (ignorado por git)
+│   │   └── secop_bienes.parquet    # (descargar del enlace de arriba y ubicar aquí)
+│   └── processed/                  # Datos derivados, generados por 02 (ignorado por git)
+│       └── secop_bienes_limpio.parquet
+├── notebooks/
+│   ├── 01_entendimiento.ipynb      # Entregable 1: entendimiento inicial + decisión de periodo
+│   ├── 02_limpieza.ipynb           # Limpieza + construcción de las 3 banderas de desviación
+│   └── 03_analisis.ipynb           # (pendiente) Hipótesis, pruebas y visualización
+├── figs/                           # Figuras exportadas por los notebooks
 └── README.md
 ```
+
+## Instrucciones de ejecución
+
+1. Descargar el dataset del enlace de arriba y ubicarlo en `data/raw/secop_bienes.parquet`.
+2. Ejecutar los notebooks **secuencialmente**:
+   1. `notebooks/01_entendimiento.ipynb`
+   2. `notebooks/02_limpieza.ipynb` → genera `data/processed/secop_bienes_limpio.parquet`
+   3. `notebooks/03_analisis.ipynb` _(pendiente)_
+
+Dependencias en `requirements.txt` / `environment.yml` (raíz del repo).
+
+> **Estado:** completos los notebooks 01 (entendimiento) y 02 (limpieza + banderas de desviación).
+> Pendientes el análisis (03) y el informe ejecutivo. Ver `PLAN.md`.
