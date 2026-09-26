@@ -50,7 +50,7 @@ Y las analizamos con las características que se conocen **al firmar**: valor, m
 La idea es sencilla: al firmar un contrato, sumar señales de riesgo. Entre más señales, más prioridad de
 seguimiento. Ordenados de mayor a menor capacidad de discriminar:
 
-### Prioridad ALTA — el perfil que más se desvía
+### Prioridad **ALTA**: el perfil que más se desvía
 Combinando las señales que sí sirven para elegir (pedir plazo o no ejecutar presupuesto), el grupo de mayor
 riesgo es claro:
 
