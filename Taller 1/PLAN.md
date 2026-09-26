@@ -79,5 +79,5 @@ TALLER 1/
 - [x] Planeación
 - [x] Notebook 01 — Entendimiento inicial + decisión de periodo (ejecutado sin errores)
 - [x] Notebook 02 — Limpieza y construcción de banderas (ejecutado sin errores; genera `data/secop_bienes_limpio.parquet`)
-- [ ] Notebook 03 — Análisis e hipótesis
-- [ ] Informe ejecutivo + README
+- [x] Notebook 03 — Análisis e hipótesis (ejecutado sin errores; 12 hipótesis contrastadas H1–H12)
+- [ ] Informe ejecutivo + README (Entregable 4)

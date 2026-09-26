@@ -51,7 +51,7 @@ Taller 1/
 ├── notebooks/
 │   ├── 01_entendimiento.ipynb      # Entregable 1: entendimiento inicial + decisión de periodo
 │   ├── 02_limpieza.ipynb           # Limpieza + construcción de las 3 banderas de desviación
-│   └── 03_analisis.ipynb           # (pendiente) Hipótesis, pruebas y visualización
+│   └── 03_analisis.ipynb           # Entregables 2 y 3: estrategia, hipótesis (χ²/Mann-Whitney), visualización
 ├── figs/                           # Figuras exportadas por los notebooks
 └── README.md
 ```
@@ -62,9 +62,10 @@ Taller 1/
 2. Ejecutar los notebooks **secuencialmente**:
    1. `notebooks/01_entendimiento.ipynb`
    2. `notebooks/02_limpieza.ipynb` → genera `data/processed/secop_bienes_limpio.parquet`
-   3. `notebooks/03_analisis.ipynb` _(pendiente)_
+   3. `notebooks/03_analisis.ipynb`
 
 Dependencias en `requirements.txt` / `environment.yml` (raíz del repo).
 
-> **Estado:** completos los notebooks 01 (entendimiento) y 02 (limpieza + banderas de desviación).
-> Pendientes el análisis (03) y el informe ejecutivo. Ver `PLAN.md`.
+> **Estado:** completos los notebooks 01 (entendimiento), 02 (limpieza + banderas) y 03 (análisis:
+> 12 hipótesis contrastadas + visualización multivariada). Pendiente el informe ejecutivo (Entregable 4).
+> Ver `PLAN.md`.
