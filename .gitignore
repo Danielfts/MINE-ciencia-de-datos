@@ -22,3 +22,7 @@ env/
 .DS_Store
 .vscode/
 .idea/
+
+# Claude Code (local, personal)
+.claude/settings.local.json
+CLAUDE.local.md
