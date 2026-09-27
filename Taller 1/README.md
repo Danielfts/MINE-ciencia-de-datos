@@ -45,7 +45,6 @@ deben identificarse y tratarse de forma justificada.
 Taller 1/
 ├── Taller 1.pdf                    # Enunciado original
 ├── INFORME_EJECUTIVO.md            # Entregable 4: criterios de focalización + limitaciones
-├── PLAN.md                         # Planeación y estado de avance
 ├── data/
 │   ├── raw/                        # Dataset original sin procesar (ignorado por git)
 │   │   └── secop_bienes.parquet    # (descargar del enlace de arriba y ubicar aquí)
@@ -84,4 +83,4 @@ Dependencias en `requirements.txt` / `environment.yml` (raíz del repo).
 
 Detalle y recomendaciones priorizadas en el **[informe ejecutivo](INFORME_EJECUTIVO.md)**.
 
-> **Estado:** completos los cuatro entregables (notebooks 01–03 + informe ejecutivo). Ver `PLAN.md`.
+> **Estado:** completos los cuatro entregables (notebooks 01–03 + informe ejecutivo).

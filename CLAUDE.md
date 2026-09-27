@@ -62,8 +62,7 @@ dataset `secop_bienes.parquet` (196,391 × 36, SECOP II contracts 2019–2025) i
 - **`INFORME_EJECUTIVO.md`** is Deliverable 4. It is a plain-language report of the targeting criteria and the
   limitations of the analysis. `figs/` holds PNGs exported by the notebooks, named with their notebook prefix
   (`01_*`, `03_*`).
-- `PLAN.md` tracks planning and status, and `Taller 1/README.md` summarizes the conclusions. Update both when
-  findings change.
+- `Taller 1/README.md` summarizes the conclusions and status. Update it when findings change.
 
 ## Conventions in the notebooks
 
