@@ -57,6 +57,7 @@ Taller 1/
 │   ├── 02_limpieza.ipynb           # Limpieza + construcción de las 3 banderas de desviación
 │   └── 03_analisis.ipynb           # Entregables 2 y 3: estrategia, hipótesis (χ²/Mann-Whitney), visualización
 ├── figs/                           # Figuras exportadas por los notebooks
+├── referencias/                    # Documentos oficiales usados para interpretar los datos (ver su README)
 └── README.md
 ```
 
@@ -79,11 +80,13 @@ El PDF del informe ya está en el repositorio. Para regenerarlo hace falta una d
 ## Conclusiones (insights)
 
 - El **valor** del contrato anticipa riesgo, pero en dirección distinta según la desviación: los grandes piden
-  más plazo y ejecutan menos; los pequeños se cierran sin liquidar.
+  más plazo y ejecutan menos; los pequeños se declaran menos sujetos a liquidación.
 - La **modalidad** predice las adiciones de plazo (licitación ~20% vs mínima cuantía ~5%).
 - El **tipo de contrato** marca la no-ejecución (suministros ~13% vs compraventa ~2%).
-- La **no-liquidación** es masiva (~59%): no sirve para triage, sí como alerta de proceso en Salud y entidades
-  territoriales.
+- **Cerrar sin liquidar no se puede medir** con el extracto: `liquidaci_n` indica si el contrato *requiere*
+  liquidación (según la guía del SECOP II), y faltan las fechas de liquidación. Lo que sí se ve: más de la mitad de
+  los suministros del estatuto general cerrados, que por ley suelen requerir liquidación, no están marcados como
+  sujetos a ella, sobre todo en entidades territoriales.
 - El **tamaño del proveedor (PyME)** no discrimina: no conviene usarlo como criterio.
 - **Perfil de mayor riesgo:** suministros de funcionamiento en modalidades de mayor cuantía (~2× el promedio).
 

@@ -41,7 +41,9 @@ dataset `secop_bienes.parquet` (196,391 × 36, SECOP II contracts 2019–2025) i
 
 - **`01_entendimiento`** is the full detail behind Deliverable 1. It covers dimensions and types, univariate
   analysis of the top 5 attributes, the evidence for the period cut, and data quality (section 4). It reads raw
-  data only. Section 4 walks the quality levels (atributo → registro → columna → tabla → múltiples tablas) and
+  data only. Section 1.1 is the data dictionary: descriptions for all 36 columns from the official
+  datos.gov.co metadata (dataset `jbjy-vk9h`) and the SECOP II contract-management guide, with computed types
+  and values. An assert enforces full column coverage. Section 4 walks the quality levels (atributo → registro → columna → tabla → múltiples tablas) and
   tags each finding with a course dimension. Every check calls `registrar(...)`, and the catalog in 4.7 is built
   from those calls, so add new checks the same way.
 - **`02_limpieza`** reads raw data and writes `data/processed/secop_bienes_limpio.parquet`, which is the only
@@ -56,7 +58,13 @@ dataset `secop_bienes.parquet` (196,391 × 36, SECOP II contracts 2019–2025) i
     the rates directly:
     - `adicion_plazo = dias_adicionados > 0`, computed on all rows. In 03 the base is `periodo_analisis`.
     - `subejecucion = facturado/valor < 0.9`, only when `ciclo_cerrado & periodo & valor_facturado > 0`.
-    - `sin_liquidar = liquidaci_n == "no"`, only when `ciclo_cerrado & periodo`.
+    - `no_sujeto_liquidacion = liquidaci_n == "no"`, only when `ciclo_cerrado & periodo`. `liquidaci_n == "Si"`
+      means the entity marked at contract creation that liquidation *applies* (per the SECOP II
+      contract-management guide), not that the contract was liquidated. So this is not a deviation flag: the
+      "closed without liquidation" deviation can't be measured, because the extract lacks
+      `fecha_inicio_liquidacion`/`fecha_fin_liquidacion`. Notebook 03 §3.4 reads it as a registration signal
+      (special regime vs. supplies under the general statute), and the report lists the missing columns as a
+      limitation. Never describe it as "no se liquida".
   - Encoding is already correct UTF-8. The `�` seen in the console is a display artifact, so do not "fix" it.
 - **`03_analisis`** is Deliverables 2 and 3. It builds `base_adic`, `base_sub` and `base_liq` from the flags'
   non-null masks. The shared helpers are `test_categorica` (χ² + Cramér's V, which reports category rates with
@@ -82,6 +90,10 @@ Always rebuild and commit the PDF together with any `.tex` change; graders read 
 - **Special characters:** write `~`, `≤`, `×` and `≈` as `\apx`, `$\leq$`, `$\times$` and `$\approx$`. Write
   dataset column names with `\col{...}`, which allows line breaks at underscores.
 - `Taller 1/README.md` summarizes the conclusions and status. Update it when findings change.
+
+`Taller 1/referencias/` holds the official sources used to interpret the data: the datos.gov.co metadata, the
+SECOP II and liquidation guides from Colombia Compra, and the texts of Ley 80 and Ley 1150. Its README maps each
+file to what it supports. Cite these files when interpreting a column.
 
 ## Conventions in the notebooks
 

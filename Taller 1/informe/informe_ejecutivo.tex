@@ -43,7 +43,7 @@
 \usepackage[section]{placeins}
 \makeatletter\setlength{\@fptop}{0pt}\makeatother  % páginas de solo flotantes: alineadas arriba
 \usepackage[font=small,labelfont={bf,color=gris},textfont={color=gris},skip=6pt]{caption}
-\usepackage{booktabs,tabularx,array}
+\usepackage{booktabs,tabularx,array,longtable}
 \renewcommand{\arraystretch}{1.3}
 \arrayrulecolor{marino!60}
 \usepackage[inline]{enumitem}
@@ -158,7 +158,7 @@ desviarse}, para concentrar ahí el seguimiento.
 
 \noindent\cifra{196.391}{contratos de bienes en SECOP II, firmados entre 2019 y 2025}\hfill
 \cifra{121.644}{contratos firmados hasta 2023: la base del análisis}\hfill
-\cifra{59\,\%}{de los contratos cerrados no se liquida}
+\cifra{15.686}{suministros cerrados sin marca de liquidación, aunque por ley suelen requerirla}
 \vspace{10pt}
 
 Nos concentramos en los contratos firmados \textbf{hasta 2023}: los más recientes todavía están abiertos y no se
@@ -167,7 +167,8 @@ puede saber si terminaron bien. Definimos tres formas de \enquote{desviarse}:
 \begin{itemize}
   \item \textbf{Pedir más plazo} (adiciones al contrato).
   \item \textbf{No ejecutar el presupuesto} que se había comprometido.
-  \item \textbf{Cerrar sin liquidar} el contrato.
+  \item \textbf{Cerrar sin liquidar} el contrato. Con el extracto disponible esta no se puede medir directamente
+    (ver las limitaciones); en su lugar miramos qué contratos se declaran sujetos a liquidación.
 \end{itemize}
 
 Y las analizamos con las características que se conocen \textbf{al firmar}: valor, modalidad, tipo de contrato,
@@ -177,7 +178,8 @@ sector, orden de la entidad, destino del gasto y si el proveedor es PyME.
 
 \begin{enumerate}
   \item \textbf{El valor del contrato avisa, pero hay que leerlo bien.} Los contratos \textbf{grandes} tienden a
-    pedir más plazo y a no ejecutar el presupuesto; los \textbf{pequeños}, a cerrarse sin liquidar. No significa
+    pedir más plazo y a no ejecutar el presupuesto; los \textbf{pequeños} se declaran menos sujetos a liquidación, lo esperable en compras de entrega
+    única. No significa
     que \enquote{más grande = más riesgo} siempre: depende de qué desviación preocupe.
   \item \textbf{La modalidad predice las adiciones de plazo.} La \textbf{licitación pública} pide plazo extra en
     el \apx20\,\% de los casos, contra apenas \apx5\,\% en la \textbf{mínima cuantía}. Las modalidades
@@ -185,10 +187,12 @@ sector, orden de la entidad, destino del gasto y si el proveedor es PyME.
   \item \textbf{El tipo de contrato marca la no-ejecución.} Los \textbf{suministros} dejan plata sin ejecutar
     mucho más (\apx13\,\%) que las \textbf{compraventas} (\apx2\,\%). Tiene lógica: el suministro se entrega por
     partes y es fácil que no se agote el monto reservado.
-  \item \textbf{La no-liquidación es un problema de proceso y no de contratos sueltos.} Le pasa a
-    \textbf{\apx6 de cada 10} contratos cerrados, sobre todo en ciertos sectores (Salud \apx78\,\%) y en
-    entidades \textbf{territoriales} (\apx67\,\% frente a \apx54\,\% en las nacionales). Como es tan común, no
-    sirve para elegir a quién vigilar uno por uno; es una alerta para arreglar el proceso de cierre.
+  \item \textbf{La liquidación no se puede medir, pero su registro deja un punto de revisión.} El \apx59\,\% de
+    los contratos cerrados no está marcado como sujeto a liquidación. Buena parte se explica por el
+    \textbf{régimen especial}, que no está obligado a liquidar por la Ley 80 (en Salud, dos de cada tres contratos
+    son de ese régimen). Pero más de la mitad de los \textbf{suministros} del estatuto general, que por ser de
+    tracto sucesivo por lo general deben liquidarse, tampoco está marcada: 63\,\% en las entidades territoriales
+    frente a 44\,\% en las nacionales.
   \item \textbf{El tamaño del proveedor (PyME) no ayuda.} No distingue a los contratos que se desvían. Es un
     dato útil justo porque evita gastar esfuerzo en un criterio que no discrimina.
 \end{enumerate}
@@ -200,7 +204,7 @@ seguimiento. Los criterios van ordenados de mayor a menor capacidad de discrimin
 
 \textbf{Los factores que sugiere el enunciado, y cómo los usamos:} el \textbf{valor} y la \textbf{modalidad}
 entran en el triage de contratos; el \textbf{destino del gasto} y el \textbf{tipo de contrato} lo afinan; y el
-\textbf{sector}, junto con el orden de la entidad, es un criterio a nivel de entidad para priorizar la revisión de
+\textbf{sector}, junto con el orden de la entidad, es un criterio a nivel de entidad para revisar cómo se registra
 la liquidación. Todos salen de los datos (notebooks \col{01}–\col{03}).
 
 \subsection{Prioridad alta: el perfil que más se desvía}
@@ -248,20 +252,26 @@ Aunque un contrato no caiga en el perfil de arriba, estas señales por sí solas
     sería gastar esfuerzo sin ganar precisión.
 \end{itemize}
 
-\subsection{Criterio por sector y orden: dónde auditar la liquidación}
+\subsection{Criterio a nivel de entidad: el registro de la liquidación}
 
-El \textbf{sector} y el \textbf{orden de la entidad} también son criterios de focalización, pero apuntan a otra
-desviación (la no-liquidación) y a otro nivel: no a \enquote{vigilar este contrato}, sino a \textbf{dónde poner la
-lupa como entidad}. Como la no-liquidación es masiva (59\,\% de los cerrados), no distingue contratos uno a uno;
-lo que sí hace es señalar con claridad \textbf{qué entidades revisar}: las del \textbf{sector Salud} (\apx78\,\%
-sin liquidar) y las de \textbf{orden territorial} (\apx67\,\% frente a \apx54\,\% en las nacionales).
+El \textbf{sector} y el \textbf{orden de la entidad} también son criterios de focalización, pero a otro nivel: no
+a \enquote{vigilar este contrato}, sino a \textbf{qué revisar en cada entidad}. La señal no es una desviación de
+la ejecución, sino si el contrato quedó marcado como sujeto a liquidación, es decir, al corte de cuentas final que
+la ley exige para los contratos de tracto sucesivo (art. 60 de la Ley 80 de 1993).
+
+Las diferencias entre sectores (Salud \apx78\,\% sin marca, frente a Defensa \apx36\,\%) se explican en buena
+parte por el régimen especial, que no está obligado a liquidar. Lo que sí merece revisión son los
+\textbf{15.686 suministros del estatuto general} cerrados sin marca de liquidación (52\,\% de ellos), sobre todo
+en las entidades territoriales.
 
 \begin{destacado}
-\textbf{Criterio:} priorizar la auditoría del proceso de liquidación en las \textbf{entidades territoriales} y en
-los \textbf{sectores con peor cumplimiento}, con Salud a la cabeza.
+\textbf{Criterio:} revisar, empezando por las \textbf{entidades territoriales}, los \textbf{suministros del estatuto
+general cerrados sin marca de liquidación}. O la marca se registró mal, o se cerraron sin el corte de cuentas que
+exige la ley; con este extracto no se puede distinguir entre las dos.
 \end{destacado}
 
-\figura{03_h4_sector_orden}{No-liquidación por sector (peores y mejores) y por orden de la entidad.}
+\figura{03_h4_regimen}{Contratos cerrados sin marca de liquidación, por régimen y tipo (izquierda), y suministros
+del estatuto general sin marca, por orden de la entidad (derecha).}
 
 \subsection{Cómo se usaría en la práctica}
 
@@ -274,6 +284,15 @@ entran a la lista de seguimiento cercano. Es una regla simple, transparente y ap
 Estos son los límites del análisis, para leer los resultados con cuidado:
 
 \begin{itemize}
+  \item \textbf{No se puede saber si un contrato se liquidó: limitación del dataset y del trabajo.} La desviación
+    \enquote{cerrar sin liquidar} que pide el enunciado no se puede medir con el extracto entregado. El campo
+    \col{liquidaci_n} no indica si el contrato se liquidó, aunque su descripción oficial lo diga: según la guía del
+    SECOP II, la entidad lo marca al crear el contrato para indicar que \emph{requiere} liquidación. Las columnas
+    que sí muestran si la liquidación ocurrió, \col{fecha_inicio_liquidacion} y \col{fecha_fin_liquidacion}, existen
+    en el conjunto completo de SECOP II en datos.gov.co, pero no vienen en el extracto, y este trabajo no las
+    incorporó. Por eso reportamos qué contratos se declaran sujetos a liquidación, no cuáles se liquidaron. Un paso
+    natural a futuro es traer esas dos columnas desde datos.gov.co, cruzándolas por \col{id_contrato}, y medir la
+    desviación directamente, incluido si la liquidación se hizo dentro de los plazos de la Ley 1150 de 2007.
   \item \textbf{Es descriptivo, no un modelo.} Miramos las señales de a una (o combinadas de forma simple en los
     segmentos), pero \textbf{no aislamos el efecto de cada variable controlando por las demás}. Por ejemplo,
     sector y orden están entrelazados; los separamos con un mapa de calor, no con un modelo. Un paso natural a
@@ -290,7 +309,7 @@ Estos son los límites del análisis, para leer los resultados con cuidado:
   \item \textbf{Calidad de la fuente.} Son datos administrativos reales con vacíos e inconsistencias (fechas
     ilógicas, montos incompletos); los tratamos de forma documentada, pero cualquier conclusión hereda esas
     limitaciones.
-  \item \textbf{Periodo.} El análisis de no-ejecución y no-liquidación se hizo sobre contratos firmados hasta
+  \item \textbf{Periodo.} El análisis de no-ejecución y de la marca de liquidación se hizo sobre contratos firmados hasta
     2023; los patrones podrían cambiar en años más recientes.
 \end{itemize}
 
@@ -299,8 +318,8 @@ Estos son los límites del análisis, para leer los resultados con cuidado:
 Con un equipo pequeño, la mejor apuesta es concentrar la supervisión en el \textbf{perfil de alto riesgo}
 (suministros de funcionamiento en modalidades de mayor cuantía, y contratos de valor alto), usar las
 \textbf{señales individuales} para afinar, y \textbf{no} gastar esfuerzo en criterios que no discriminan, como el
-tamaño del proveedor. En paralelo, y a nivel de entidad, \textbf{priorizar la auditoría de la liquidación} en el
-sector Salud y en las entidades territoriales, que es donde se concentra ese problema de proceso.
+tamaño del proveedor. En paralelo, y a nivel de entidad, \textbf{revisar el registro de la liquidación} de los
+suministros del estatuto general cerrados sin marca, empezando por las entidades territoriales.
 
 \vspace{6pt}
 {\small\color{gris}El detalle metodológico, las pruebas estadísticas y las figuras están en los notebooks
@@ -317,6 +336,96 @@ sector Salud y en las entidades territoriales, que es donde se concentra ese pro
 
 Resumen de \col{notebooks/01_entendimiento.ipynb}, donde están el código, las tablas completas y todas las
 figuras.
+
+\subsection{Diccionario de datos}
+
+Las descripciones vienen de dos fuentes oficiales de Colombia Compra Eficiente: los metadatos del conjunto
+\enquote{SECOP II -- Contratos Electrónicos} en datos.gov.co (\col{jbjy-vk9h}), del que el dataset es un extracto
+de 36 de sus 95 columnas, y la \emph{Guía SECOP II -- Gestión contractual para entidades estatales}
+(CCE-SEC-GI-13, 2021), que se usa donde la descripción oficial es ambigua. La información es de fuente primaria:
+cada entidad es responsable de lo que publica.
+
+{\footnotesize
+\begin{longtable}{>{\raggedright\arraybackslash}p{4.3cm} >{\raggedright\arraybackslash}p{6.9cm}
+                  >{\raggedright\arraybackslash}p{3.6cm}}
+\caption{Diccionario de datos del extracto de SECOP II.}\label{tab:diccionario}\\
+\toprule
+\textbf{Columna} & \textbf{Descripción} & \textbf{Uso en el análisis} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Columna} & \textbf{Descripción} & \textbf{Uso en el análisis} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\multicolumn{3}{l}{\bfseries\color{acento}Identificación} \\
+\col{id_contrato} & Identificador del contrato generado por el SECOP II & Chequeo de singularidad \\
+\col{urlproceso} & Enlace al proceso en el SECOP II & No se usa \\
+\addlinespace[3pt]
+\multicolumn{3}{l}{\bfseries\color{acento}Entidad} \\
+\col{nombre_entidad} & Entidad del Estado que publica el contrato & No se usa \\
+\col{departamento} & Departamento donde está registrada la entidad (no el lugar de ejecución) & No se usa \\
+\col{ciudad} & Ciudad donde está registrada la entidad & No se usa \\
+\col{orden} & Orden de la entidad: nacional, territorial o corporación autónoma & Predictor (marca de liquidación) \\
+\col{sector} & Sector administrativo de la entidad & Top-5 · predictor (marca de liquidación) \\
+\col{rama} & Rama del poder público de la entidad & No se usa \\
+\col{entidad_centralizada} & Si la entidad es centralizada o descentralizada & No se usa \\
+\addlinespace[3pt]
+\multicolumn{3}{l}{\bfseries\color{acento}Contrato} \\
+\col{tipo_de_contrato} & Tipo de contrato según su marco jurídico (compraventa o suministros) & Top-5 · predictor (no-ejecución) \\
+\col{modalidad_de_contratacion} & Modalidad de selección del contratista (9 modalidades) & Top-5 · predictor (adición de plazo) \\
+\col{codigo_de_categoria_principal} & Código UNSPSC de la categoría principal del bien & No se usa \\
+\col{objeto_del_contrato} & Objeto del contrato (texto libre) & No se usa \\
+\col{condiciones_de_entrega} & Condiciones de entrega elegidas de una lista; algunos valores llegan como códigos internos & No se usa \\
+\addlinespace[3pt]
+\multicolumn{3}{l}{\bfseries\color{acento}Plazo} \\
+\col{fecha_de_firma} & Fecha de firma del contrato electrónico & Año de firma y periodo \\
+\col{fecha_de_inicio_del_contrato} & Inicio de las responsabilidades contractuales & Chequeos de consistencia \\
+\col{fecha_de_fin_del_contrato} & Fin de las responsabilidades contractuales; se corre si hay prórroga & Chequeos de consistencia \\
+\col{duraci_n_del_contrato} & Duración pactada, en texto con unidad (\enquote{245 Dia(s)}) & Se convierte a días \\
+\col{dias_adicionados} & Días calendario prorrogados; la plataforma los cuenta sola cuando una modificación corre la fecha de terminación & Top-5 · define la adición de plazo \\
+\col{el_contrato_puede_ser_prorrogado} & Si al crear el contrato se previó una prórroga & No se usa \\
+\addlinespace[3pt]
+\multicolumn{3}{l}{\bfseries\color{acento}Proveedor y representante legal} \\
+\col{proveedor_adjudicado} & Nombre del proveedor adjudicado & No se usa \\
+\col{documento_proveedor} & Número de documento del proveedor & No se usa \\
+\col{es_pyme} & Si el proveedor es una pyme & Predictor (PyME) \\
+\col{es_grupo} & Si el proveedor es un grupo de empresas & No se usa \\
+\col{g_nero_representante_legal} & Género del representante legal & No se usa \\
+\col{nacionalidad_representante_legal} & Nacionalidad del representante legal & No se usa \\
+\addlinespace[3pt]
+\multicolumn{3}{l}{\bfseries\color{acento}Valores (COP)} \\
+\col{valor_del_contrato} & Valor total del contrato & Top-5 · predictor · base del ratio de ejecución \\
+\col{valor_facturado} & Valor facturado a la fecha, según las solicitudes de pago que registra el proveedor & Define la no-ejecución \\
+\col{valor_pagado} & Valor pagado a la fecha; solo suma los pagos que la entidad marca como pagados en la plataforma & No se usa (subreportado) \\
+\col{valor_pendiente_de_pago} & Valor pendiente de pago a la fecha (casi siempre, valor $-$ pagado) & No se usa (derivado) \\
+\addlinespace[3pt]
+\multicolumn{3}{l}{\bfseries\color{acento}Condiciones, obligaciones y presupuesto} \\
+\col{habilita_pago_adelantado} & Si el contrato tiene habilitado el pago de adelantos & No se usa \\
+\col{liquidaci_n} & Si la entidad marcó, al crear el contrato, que requiere liquidación (la descripción oficial dice \enquote{si ha sido liquidado}) & Define la marca de liquidación \\
+\col{obligaci_n_ambiental} & Si el contrato tiene obligaciones ambientales & No se usa \\
+\col{origen_de_los_recursos} & Origen presupuestal de los recursos & No se usa \\
+\col{destino_gasto} & Destino presupuestal del gasto: funcionamiento o inversión & Predictor \\
+\addlinespace[3pt]
+\multicolumn{3}{l}{\bfseries\color{acento}Estado} \\
+\col{estado_contrato} & Estado del contrato frente a su firma, ejecución o cierre & Filtro de contratos cerrados \\
+\end{longtable}
+}
+
+Tres aclaraciones que cambian cómo se leen los datos:
+
+\begin{itemize}
+  \item \textbf{\col{liquidaci_n} no dice si el contrato ya se liquidó.} Según la guía del SECOP, la entidad marca
+    al crear el contrato si aplica la liquidación, igual que las obligaciones ambientales. Los datos lo confirman:
+    el 32,3\,\% de los contratos en ejecución, que no pueden estar liquidados, dicen \enquote{Si}. Para saber si un
+    contrato se liquidó harían falta \col{fecha_inicio_liquidacion} y \col{fecha_fin_liquidacion}, que el
+    conjunto completo publica pero el extracto no trae.
+  \item \textbf{\col{valor_pagado} solo refleja lo que la entidad registra.} Si la entidad paga por fuera de la
+    plataforma y no lo marca, el campo queda en cero; de ahí su subreporte.
+  \item \textbf{\col{dias_adicionados} cuenta prórrogas, no adiciones de dinero.} Esos contratos suelen quedar en
+    estado \enquote{Modificado}: el 49,8\,\% de ellos tiene días adicionados, frente al 0,9\,\% del resto.
+\end{itemize}
 
 \subsection{Dimensiones y tipos de datos}
 
@@ -376,14 +485,15 @@ Los contratos recientes todavía no han terminado, así que no se puede saber si
 \end{tabular}
 \end{table}
 
-El análisis usa los contratos \textbf{firmados hasta 2023} (121.644). Para la no-ejecución del presupuesto y la
-no-liquidación, que solo se pueden medir al cierre, se usan además solo los contratos \textbf{terminados o
+El análisis usa los contratos \textbf{firmados hasta 2023} (121.644). Para la no-ejecución del presupuesto, que solo
+se puede medir al cierre, y para la marca de liquidación (por comparabilidad), se usan además solo los contratos
+\textbf{terminados o
 cerrados} (68.351).
 
 \subsection{Calidad de datos}
 
 Se revisaron los cinco niveles donde puede aparecer un problema (atributo, registro, columna, tabla y múltiples
-tablas) y se clasificó cada hallazgo en su dimensión de calidad. El catálogo completo del notebook tiene 29
+tablas) y se clasificó cada hallazgo en su dimensión de calidad. El catálogo completo del notebook tiene 30
 hallazgos; en la tabla~\ref{tab:calidad} están los que más pesan. No hay duplicados exactos,
 identificadores repetidos ni errores de digitación en las categorías. Las correcciones se aplican en
 \col{notebooks/02_limpieza.ipynb}, sin eliminar filas: los casos problemáticos se marcan con columnas de control.
@@ -407,15 +517,17 @@ Atributo · conformidad & Etiquetas con inicial minúscula en \col{estado_contra
   & 54.273 / 39.621 & Estandarizar la inicial \\
 Registro · consistencia & Fechas en orden imposible (firma después del fin; inicio después del fin)
   & 2.601 / 125 & Marcar; no se calculan duraciones con fechas \\
-Registro · consistencia & Contrato \enquote{En ejecución} pero marcado como liquidado
-  & 16.634 (32,3\,\% de los que están en ejecución) & Se documenta: el campo \col{liquidaci_n} podría no
-  significar \enquote{ya se liquidó} \\
 Registro · consistencia & Facturado o pagado mayor que el valor del contrato & 214 / 177
   & Acotar el ratio de ejecución a [0, 1] \\
+Columna · credibilidad & La descripción oficial de \col{liquidaci_n} (\enquote{si ha sido liquidado}) no
+  corresponde a su uso: contratos en ejecución con \enquote{Si} & 16.634 (32,3\,\% de los que están en ejecución)
+  & Se lee como \enquote{sujeto a liquidación} (guía del SECOP II) \\
 Tabla · precisión & Duplicados aproximados (mismo contrato con otro id) & 36 & Se conservan (efecto
   despreciable) \\
 Tabla · temporalidad & Contratos de 2024–2025, muchos aún abiertos & 74.747 (38,1\,\%) & Analizar firmas hasta
   2023 \\
+Tabla · relevancia & Faltan \col{fecha_inicio_liquidacion} y \col{fecha_fin_liquidacion}: no se puede saber si
+  un contrato se liquidó & Todos & Se documenta como limitación \\
 \bottomrule
 \end{tabularx}
 \caption{Principales problemas de calidad, con su nivel, dimensión y tratamiento.}\label{tab:calidad}
