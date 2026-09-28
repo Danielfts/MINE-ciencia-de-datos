@@ -87,7 +87,10 @@ El PDF del informe ya está en el repositorio. Para regenerarlo hace falta una d
   liquidación (según la guía del SECOP II), y faltan las fechas de liquidación. Lo que sí se ve: más de la mitad de
   los suministros del estatuto general cerrados, que por ley suelen requerir liquidación, no están marcados como
   sujetos a ella, sobre todo en entidades territoriales.
-- El **tamaño del proveedor (PyME)** no discrimina: no conviene usarlo como criterio.
+- El **tamaño del proveedor** solo distingue la no-ejecución: los proveedores no PyME no ejecutan casi el doble
+  (~13% vs ~7%); en plazo y liquidación no hay diferencia.
+- Todas las hipótesis de categorías se juzgan con un mismo **umbral práctico**: una diferencia de tasas de al
+  menos 5 puntos porcentuales (límite inferior del IC 95%).
 - **Perfil de mayor riesgo:** suministros de funcionamiento en modalidades de mayor cuantía (~2× el promedio).
 
 Detalle y recomendaciones priorizadas en el **[informe ejecutivo](informe/informe_ejecutivo.pdf)**.

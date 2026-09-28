@@ -67,9 +67,14 @@ dataset `secop_bienes.parquet` (196,391 × 36, SECOP II contracts 2019–2025) i
       limitation. Never describe it as "no se liquida".
   - Encoding is already correct UTF-8. The `�` seen in the console is a display artifact, so do not "fix" it.
 - **`03_analisis`** is Deliverables 2 and 3. It builds `base_adic`, `base_sub` and `base_liq` from the flags'
-  non-null masks. The shared helpers are `test_categorica` (χ² + Cramér's V, which reports category rates with
-  n ≥ 200) and `test_valor` (Mann-Whitney on `valor_log`). The significance level is `ALPHA = 0.05`. Hypotheses
-  H1–H8 report both significant **and** non-significant results, which the rubric requires.
+  non-null masks. The shared helpers are `test_categorica` and `test_valor` (Mann-Whitney on `valor_log`).
+  `test_categorica` runs a χ² test, reports Cramér's V (never as a verbal label), shows category rates with
+  n ≥ 200, and contrasts the highest-rate and lowest-rate categories with n ≥ `MIN_N_CONTRASTE`: a rate difference
+  in pp with a Welch 95% CI. `veredicto(r)` applies the **single practical threshold**: `UMBRAL_PP = 5`, judged on
+  the CI's lower bound, for every categorical hypothesis. Keep verdicts in prose consistent with it. The
+  significance level is `ALPHA = 0.05`. Hypotheses H1–H8 report both significant **and** non-significant results,
+  which the rubric requires. H8 (PyME) was framed expecting no difference, but it passes the threshold for
+  no-ejecución (non-PyME ~13% vs PyME ~7%).
 - **`informe/informe_ejecutivo.tex`** (and its committed PDF) holds two deliverables in one file. The executive
   report (Deliverable 4) comes first: a plain-language report of the targeting criteria and the limitations of
   the analysis. At the end, a technical annex (Deliverable 1) is a brief summary of notebook 01. The annex quotes

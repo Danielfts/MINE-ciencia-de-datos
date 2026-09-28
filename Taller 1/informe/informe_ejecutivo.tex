@@ -193,8 +193,11 @@ sector, orden de la entidad, destino del gasto y si el proveedor es PyME.
     son de ese régimen). Pero más de la mitad de los \textbf{suministros} del estatuto general, que por ser de
     tracto sucesivo por lo general deben liquidarse, tampoco está marcada: 63\,\% en las entidades territoriales
     frente a 44\,\% en las nacionales.
-  \item \textbf{El tamaño del proveedor (PyME) no ayuda.} No distingue a los contratos que se desvían. Es un
-    dato útil justo porque evita gastar esfuerzo en un criterio que no discrimina.
+  \item \textbf{El tamaño del proveedor solo distingue la no-ejecución.} Los contratos con proveedores
+    \textbf{no PyME} dejan presupuesto sin ejecutar casi el doble de veces (\apx13\,\% frente a \apx7\,\% con
+    PyME). No lo esperábamos, y puede reflejar tanto ejecución real como la forma en que cada tipo de proveedor
+    registra su facturación en la plataforma. Para el plazo y la liquidación, el tamaño del proveedor no marca
+    diferencia.
 \end{enumerate}
 
 \section{Criterios de focalización recomendados}
@@ -219,6 +222,9 @@ cuantía}\par\vspace{4pt}
 de \textbf{casi el doble del promedio}: es el primer candidato a seguimiento cercano desde la firma.}
 \end{prioridad}
 
+En este perfil pesan sobre todo el tipo de contrato y la modalidad. Que el gasto sea de funcionamiento suma algo
+encima de ellos, pero por sí solo no supera el umbral práctico (ver las limitaciones).
+
 \figura{03_segmentos_riesgo}{Segmentos con más riesgo de desviación (pedir plazo o no ejecutar el presupuesto).}
 
 \subsection{Señales individuales para sumar al triage}
@@ -236,7 +242,7 @@ Aunque un contrato no caiga en el perfil de arriba, estas señales por sí solas
 \textbf{Tipo = suministro} & Riesgo de \textbf{no ejecutar el presupuesto} & Suministros \apx13\,\% frente a
   compraventa \apx2\,\% \\
 \textbf{Destino = funcionamiento} & Riesgo de \textbf{no ejecución} & Funcionamiento \apx10\,\% frente a
-  inversión \apx5\,\% \\
+  inversión \apx5\,\%; en el límite del umbral, solo como apoyo \\
 \textbf{Valor alto} (dentro de su sector) & Riesgo de \textbf{adición y no-ejecución} & Los desviados valen
   \apx2--2,5 veces más (mediana) \\
 \bottomrule
@@ -244,13 +250,6 @@ Aunque un contrato no caiga en el perfil de arriba, estas señales por sí solas
 \end{table}
 
 \figura{03_h2_modalidad}{Porcentaje de contratos con adición de plazo por modalidad.}
-
-\subsection{Qué no usar para focalizar}
-
-\begin{itemize}
-  \item \textbf{El tamaño del proveedor (PyME o no PyME).} No distingue a los que se desvían: priorizar por ahí
-    sería gastar esfuerzo sin ganar precisión.
-\end{itemize}
 
 \subsection{Criterio a nivel de entidad: el registro de la liquidación}
 
@@ -305,7 +304,9 @@ Estos son los límites del análisis, para leer los resultados con cuidado:
     del contrato en el cálculo, así que parte de la relación \enquote{los grandes ejecutan menos} podría ser un
     efecto de construcción y no solo del mundo real. La tomamos como una señal de apoyo.
   \item \textbf{Con tantos datos, casi todo sale \enquote{significativo}.} Por eso no nos guiamos por el p-valor
-    sino por el tamaño del efecto; aun así, conviene no sobreinterpretar diferencias pequeñas.
+    sino por un umbral práctico, el mismo para todas las hipótesis: una característica sirve para focalizar si
+    separa las tasas de desviación por al menos 5 puntos porcentuales, medidos con el límite inferior de su
+    intervalo de confianza. Ese umbral lo fijamos al revisar el análisis, no antes de ver los datos.
   \item \textbf{Calidad de la fuente.} Son datos administrativos reales con vacíos e inconsistencias (fechas
     ilógicas, montos incompletos); los tratamos de forma documentada, pero cualquier conclusión hereda esas
     limitaciones.
@@ -316,9 +317,8 @@ Estos son los límites del análisis, para leer los resultados con cuidado:
 \section{Cierre}
 
 Con un equipo pequeño, la mejor apuesta es concentrar la supervisión en el \textbf{perfil de alto riesgo}
-(suministros de funcionamiento en modalidades de mayor cuantía, y contratos de valor alto), usar las
-\textbf{señales individuales} para afinar, y \textbf{no} gastar esfuerzo en criterios que no discriminan, como el
-tamaño del proveedor. En paralelo, y a nivel de entidad, \textbf{revisar el registro de la liquidación} de los
+(suministros de funcionamiento en modalidades de mayor cuantía, y contratos de valor alto) y usar las
+\textbf{señales individuales} para afinar. En paralelo, y a nivel de entidad, \textbf{revisar el registro de la liquidación} de los
 suministros del estatuto general cerrados sin marca, empezando por las entidades territoriales.
 
 \vspace{6pt}
