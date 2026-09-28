@@ -1,0 +1,424 @@
+% Informe ejecutivo (Entregable 4) + anexo técnico (Entregable 1) — Taller 1, MINE-4101.
+% Compilar con XeLaTeX desde esta carpeta:  latexmk   (la configuración está en .latexmkrc)
+\documentclass[11pt,a4paper]{article}
+
+% --- Idioma y tipografía -----------------------------------------------------
+\usepackage[spanish,es-tabla,es-noshorthands,es-nolists]{babel}
+\usepackage{fontspec}
+% Fuentes: Red Hat Text/Display si están instaladas; si no, TeX Gyre Heros (incluida en TeX Live).
+\IfFontExistsTF{Red Hat Text}{%
+  \setmainfont{Red Hat Text}[BoldFont={* SemiBold}, BoldItalicFont={* SemiBold Italic}]%
+}{%
+  \setmainfont{texgyreheros}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+    ItalicFont=*-italic, BoldItalicFont=*-bolditalic]%
+}
+\IfFontExistsTF{Red Hat Display}{%
+  \newfontfamily\displayfont{Red Hat Display}[BoldFont={* Bold}]%
+  \newfontfamily\displaylight{Red Hat Display Light}%
+  \newfontfamily\titulofont{Red Hat Display}[BoldFont={* Bold}]%
+  \newfontfamily\etiquetafont{Red Hat Display}[BoldFont={* Bold}, LetterSpace=15, WordSpace=2.2]%
+}{%
+  \newfontfamily\displayfont{texgyreheros}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold]%
+  \newfontfamily\displaylight{texgyreheros}[Extension=.otf, UprightFont=*-regular]%
+  \newfontfamily\titulofont{texgyreheros}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold]%
+  \newfontfamily\etiquetafont{texgyreheros}[Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+    LetterSpace=15, WordSpace=2.2]%
+}
+\IfFontExistsTF{Adwaita Mono}{\setmonofont{Adwaita Mono}[Scale=0.86]}{}
+\usepackage{microtype}
+\usepackage[skip=6pt plus 1pt, indent=0pt]{parskip}
+\usepackage[autostyle=false,style=english]{csquotes}
+
+% --- Página, color y estructura ----------------------------------------------
+\usepackage[a4paper,top=2.6cm,bottom=2.4cm,left=2.4cm,right=2.4cm,headheight=14pt]{geometry}
+\usepackage[table]{xcolor}
+\definecolor{marino}{HTML}{0B2545}
+\definecolor{acento}{HTML}{13A89E}
+\definecolor{gris}{HTML}{5B6770}
+\definecolor{claro}{HTML}{EEF2F5}
+\color{marino!85!black}
+
+\usepackage{graphicx}
+\graphicspath{{../figs/}}
+\usepackage[section]{placeins}
+\makeatletter\setlength{\@fptop}{0pt}\makeatother  % páginas de solo flotantes: alineadas arriba
+\usepackage[font=small,labelfont={bf,color=gris},textfont={color=gris},skip=6pt]{caption}
+\usepackage{booktabs,tabularx,array}
+\renewcommand{\arraystretch}{1.3}
+\arrayrulecolor{marino!60}
+\usepackage[inline]{enumitem}
+\setlist{itemsep=3pt,topsep=4pt}
+\setlist[itemize]{label={\color{acento}\textbullet}}
+\setlist[enumerate]{label={\color{acento}\bfseries\arabic*.}}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\usepackage[framemethod=default]{mdframed}
+\usepackage{lastpage}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Informe ejecutivo — ¿A qué contratos hacerles seguimiento?},
+  pdfauthor={Daniel Triviño, Nicolás Bedoya}}
+
+% --- Títulos -----------------------------------------------------------------
+\usepackage{titlesec}
+\setcounter{secnumdepth}{0}
+\newcommand{\conbarra}[1]{#1\par\nobreak\vspace{3pt}{\color{acento}\rule{2.4cm}{2.2pt}}}
+\titleformat{\section}[block]{\displayfont\LARGE\bfseries\color{marino}}{}{0pt}{\conbarra}
+\titlespacing*{\section}{0pt}{20pt}{10pt}
+\titleformat{\subsection}{\displayfont\large\bfseries\color{marino}}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{14pt}{5pt}
+
+% --- Encabezado y pie ----------------------------------------------------------
+\usepackage{fancyhdr}
+\newcommand{\parteactual}{Informe ejecutivo}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{gris}Supervisión de contratación pública de bienes}
+\fancyhead[R]{\small\bfseries\color{acento}\parteactual}
+\fancyfoot[L]{\small\color{gris}Taller 1 · MINE-4101 Ciencia de Datos Aplicada}
+\fancyfoot[R]{\small\color{gris}\thepage\ / \pageref*{LastPage}}
+\renewcommand{\headrule}{\color{claro}\hrule height 0.8pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% --- Componentes -------------------------------------------------------------
+\usepackage{url}
+\DeclareUrlCommand\col{\urlstyle{tt}}                   % nombre de columna del dataset
+\def\UrlBreaks{\do\_\do\/\do\.}
+\newcommand{\apx}{\ensuremath{\sim}}                     % "aproximadamente"
+\newcommand{\etiqueta}[1]{{\etiquetafont\small\bfseries\spaceskip=0.7em\relax\color{acento}\MakeUppercase{#1}}}
+
+\newmdenv[topline=false, bottomline=false, rightline=false, linewidth=3pt, linecolor=acento,
+  backgroundcolor=claro, innerleftmargin=12pt, innerrightmargin=10pt, innertopmargin=8pt,
+  innerbottommargin=8pt, skipabove=6pt, skipbelow=8pt]{destacado}
+\newtcolorbox{prioridad}{colback=marino, colframe=marino, boxrule=0pt, arc=2pt,
+  coltext=white, left=14pt, right=14pt, top=10pt, bottom=10pt}
+
+\newcommand{\cifra}[2]{%
+  \begin{tcolorbox}[width=0.315\linewidth, height=2.7cm, colback=claro, colframe=acento, arc=0pt,
+      toprule=2.5pt, bottomrule=0pt, leftrule=0pt, rightrule=0pt, left=10pt, right=8pt, top=8pt,
+      nobeforeafter, box align=top]
+    {\displayfont\fontsize{24}{26}\selectfont\bfseries\color{marino}#1}\par\vspace{3pt}
+    {\small\raggedright\color{gris}#2\par}
+  \end{tcolorbox}}
+
+\newcommand{\figura}[2]{%
+  \begin{figure}[htbp]\centering\includegraphics[width=0.92\linewidth]{#1}\caption{#2}\end{figure}}
+
+\begin{document}
+
+% =============================================================================
+% Portada
+% =============================================================================
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+  \coordinate (corte) at ([yshift=-0.60\paperheight]current page.north west);
+  \fill[marino] (current page.north west) rectangle ([yshift=-0.60\paperheight]current page.north east);
+  \fill[acento] (corte) rectangle ([yshift=-4pt]corte -| current page.east);
+  % Motivo geométrico discreto
+  \foreach \r/\o in {3.2/0.10, 4.6/0.07, 6.0/0.05, 7.4/0.035}
+    \draw[white, opacity=\o, line width=1.1pt]
+      ([xshift=-1.8cm, yshift=-4.2cm]current page.north east) circle (\r cm);
+  \fill[acento] ([xshift=-1.8cm, yshift=-4.2cm]current page.north east) circle (4pt);
+
+  \node[anchor=south west, text width=0.72\paperwidth, align=left, inner sep=0pt]
+    at ([xshift=2.4cm, yshift=2.2cm]corte) {%
+      {\etiquetafont\small\bfseries\spaceskip=0.7em\relax\color{acento}INFORME EJECUTIVO}\\[14pt]
+      {\titulofont\fontsize{34}{40}\selectfont\bfseries\spaceskip=0.28em\relax\color{white}¿A qué contratos\\ hacerles seguimiento?}\\[16pt]
+      {\displaylight\Large\color{white!85!marino}Criterios de focalización para la supervisión\\
+       de contratos públicos de bienes · SECOP II, 2019–2025}};
+
+  \node[anchor=north west, text width=0.72\paperwidth, align=left, inner sep=0pt]
+    at ([xshift=2.4cm, yshift=-1.6cm]corte) {%
+      {\displayfont\large\bfseries\color{marino}Daniel Triviño · Nicolás Bedoya}\\[6pt]
+      {\color{gris}Taller 1 · MINE-4101 Ciencia de Datos Aplicada\\
+       Departamento de Ingeniería de Sistemas y Computación\\
+       Universidad de los Andes · Semestre 2026-20}};
+
+  \node[anchor=south west, text width=0.80\paperwidth, align=left, inner sep=0pt]
+    at ([xshift=2.4cm, yshift=2.0cm]current page.south west) {%
+      {\color{claro!60!gris}\rule{\linewidth}{0.6pt}}\\[6pt]
+      {\small\color{gris}\textbf{Contenido:} informe ejecutivo (Entregable 4) · anexo técnico con el
+       entendimiento inicial de los datos (Entregable 1)\hfill Septiembre de 2026}};
+\end{tikzpicture}
+\end{titlepage}
+
+% =============================================================================
+% Informe ejecutivo (Entregable 4)
+% =============================================================================
+\etiqueta{Entregable 4}
+
+\section{En una frase}
+
+\begin{destacado}
+\large La oficina de control interno no puede vigilar de cerca los miles de contratos de bienes que se firman
+cada año, así que este trabajo busca \textbf{decir, desde el momento de la firma, cuáles tienen más riesgo de
+desviarse}, para concentrar ahí el seguimiento.
+\end{destacado}
+
+\section{Qué miramos}
+
+\noindent\cifra{196.391}{contratos de bienes en SECOP II, firmados entre 2019 y 2025}\hfill
+\cifra{121.644}{contratos firmados hasta 2023: la base del análisis}\hfill
+\cifra{59\,\%}{de los contratos cerrados no se liquida}
+\vspace{10pt}
+
+Nos concentramos en los contratos firmados \textbf{hasta 2023}: los más recientes todavía están abiertos y no se
+puede saber si terminaron bien. Definimos tres formas de \enquote{desviarse}:
+
+\begin{itemize}
+  \item \textbf{Pedir más plazo} (adiciones al contrato).
+  \item \textbf{No ejecutar el presupuesto} que se había comprometido.
+  \item \textbf{Cerrar sin liquidar} el contrato.
+\end{itemize}
+
+Y las analizamos con las características que se conocen \textbf{al firmar}: valor, modalidad, tipo de contrato,
+sector, orden de la entidad, destino del gasto y si el proveedor es PyME.
+
+\section{Los hallazgos, en corto}
+
+\begin{enumerate}
+  \item \textbf{El valor del contrato avisa, pero hay que leerlo bien.} Los contratos \textbf{grandes} tienden a
+    pedir más plazo y a no ejecutar el presupuesto; los \textbf{pequeños}, a cerrarse sin liquidar. No significa
+    que \enquote{más grande = más riesgo} siempre: depende de qué desviación preocupe.
+  \item \textbf{La modalidad predice las adiciones de plazo.} La \textbf{licitación pública} pide plazo extra en
+    el \apx20\,\% de los casos, contra apenas \apx5\,\% en la \textbf{mínima cuantía}. Las modalidades
+    competitivas y de mayor cuantía son las que más se alargan.
+  \item \textbf{El tipo de contrato marca la no-ejecución.} Los \textbf{suministros} dejan plata sin ejecutar
+    mucho más (\apx13\,\%) que las \textbf{compraventas} (\apx2\,\%). Tiene lógica: el suministro se entrega por
+    partes y es fácil que no se agote el monto reservado.
+  \item \textbf{La no-liquidación es un problema de proceso y no de contratos sueltos.} Le pasa a
+    \textbf{\apx6 de cada 10} contratos cerrados, sobre todo en ciertos sectores (Salud \apx78\,\%) y en
+    entidades \textbf{territoriales} (\apx67\,\% frente a \apx54\,\% en las nacionales). Como es tan común, no
+    sirve para elegir a quién vigilar uno por uno; es una alerta para arreglar el proceso de cierre.
+  \item \textbf{El tamaño del proveedor (PyME) no ayuda.} No distingue a los contratos que se desvían. Es un
+    dato útil justo porque evita gastar esfuerzo en un criterio que no discrimina.
+\end{enumerate}
+
+\section{Criterios de focalización recomendados}
+
+La idea es sencilla: al firmar un contrato, sumar señales de riesgo. Entre más señales, más prioridad de
+seguimiento. Los criterios van ordenados de mayor a menor capacidad de discriminar.
+
+\textbf{Los factores que sugiere el enunciado, y cómo los usamos:} el \textbf{valor} y la \textbf{modalidad}
+entran en el triage de contratos; el \textbf{destino del gasto} y el \textbf{tipo de contrato} lo afinan; y el
+\textbf{sector}, junto con el orden de la entidad, es un criterio a nivel de entidad para priorizar la revisión de
+la liquidación. Todos salen de los datos (notebooks \col{01}–\col{03}).
+
+\subsection{Prioridad alta: el perfil que más se desvía}
+
+Combinando las señales que sí sirven para elegir (pedir plazo o no ejecutar presupuesto), el grupo de mayor
+riesgo es claro:
+
+\begin{prioridad}
+{\displayfont\large\bfseries Suministros, de funcionamiento, contratados por modalidades competitivas o de mayor
+cuantía}\par\vspace{4pt}
+{\color{white!80!marino}Licitación pública, subasta inversa, selección abreviada. Este perfil se desvía a una tasa
+de \textbf{casi el doble del promedio}: es el primer candidato a seguimiento cercano desde la firma.}
+\end{prioridad}
+
+\figura{03_segmentos_riesgo}{Segmentos con más riesgo de desviación (pedir plazo o no ejecutar el presupuesto).}
+
+\subsection{Señales individuales para sumar al triage}
+
+Aunque un contrato no caiga en el perfil de arriba, estas señales por sí solas ya elevan el riesgo:
+
+\begin{table}[htbp]\small
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{4.2cm}
+                             >{\raggedright\arraybackslash}p{4.6cm}}
+\toprule
+\textbf{Señal (conocida al firmar)} & \textbf{Qué vigilar} & \textbf{Evidencia} \\
+\midrule
+\textbf{Modalidad} competitiva o de mayor cuantía (licitación, subasta, abreviada)
+  & Riesgo de \textbf{adición de plazo} & Licitación \apx20\,\% frente a mínima cuantía \apx5\,\% \\
+\textbf{Tipo = suministro} & Riesgo de \textbf{no ejecutar el presupuesto} & Suministros \apx13\,\% frente a
+  compraventa \apx2\,\% \\
+\textbf{Destino = funcionamiento} & Riesgo de \textbf{no ejecución} & Funcionamiento \apx10\,\% frente a
+  inversión \apx5\,\% \\
+\textbf{Valor alto} (dentro de su sector) & Riesgo de \textbf{adición y no-ejecución} & Los desviados valen
+  \apx2--2,5 veces más (mediana) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\figura{03_h2_modalidad}{Porcentaje de contratos con adición de plazo por modalidad.}
+
+\subsection{Qué no usar para focalizar}
+
+\begin{itemize}
+  \item \textbf{El tamaño del proveedor (PyME o no PyME).} No distingue a los que se desvían: priorizar por ahí
+    sería gastar esfuerzo sin ganar precisión.
+\end{itemize}
+
+\subsection{Criterio por sector y orden: dónde auditar la liquidación}
+
+El \textbf{sector} y el \textbf{orden de la entidad} también son criterios de focalización, pero apuntan a otra
+desviación (la no-liquidación) y a otro nivel: no a \enquote{vigilar este contrato}, sino a \textbf{dónde poner la
+lupa como entidad}. Como la no-liquidación es masiva (59\,\% de los cerrados), no distingue contratos uno a uno;
+lo que sí hace es señalar con claridad \textbf{qué entidades revisar}: las del \textbf{sector Salud} (\apx78\,\%
+sin liquidar) y las de \textbf{orden territorial} (\apx67\,\% frente a \apx54\,\% en las nacionales).
+
+\begin{destacado}
+\textbf{Criterio:} priorizar la auditoría del proceso de liquidación en las \textbf{entidades territoriales} y en
+los \textbf{sectores con peor cumplimiento}, con Salud a la cabeza.
+\end{destacado}
+
+\figura{03_h4_sector_orden}{No-liquidación por sector (peores y mejores) y por orden de la entidad.}
+
+\subsection{Cómo se usaría en la práctica}
+
+Al firmar, marcar cuántas señales de riesgo cumple el contrato (modalidad competitiva, es suministro, es de
+funcionamiento, valor alto para su sector). Los que sumen varias, y sobre todo los del perfil de prioridad alta,
+entran a la lista de seguimiento cercano. Es una regla simple, transparente y aplicable desde el primer día.
+
+\section{Limitaciones}
+
+Estos son los límites del análisis, para leer los resultados con cuidado:
+
+\begin{itemize}
+  \item \textbf{Es descriptivo, no un modelo.} Miramos las señales de a una (o combinadas de forma simple en los
+    segmentos), pero \textbf{no aislamos el efecto de cada variable controlando por las demás}. Por ejemplo,
+    sector y orden están entrelazados; los separamos con un mapa de calor, no con un modelo. Un paso natural a
+    futuro sería una regresión que dé el peso de cada factor ya ajustado.
+  \item \textbf{La no-ejecución depende de un supuesto sobre datos faltantes.} El 44\,\% de los contratos
+    cerrados reporta ejecución en cero, lo que interpretamos como un vacío de captura y no como no-ejecución
+    real. Si estuviéramos equivocados, la subejecución sería mucho mayor. Sin embargo, probamos el escenario
+    extremo y \textbf{la conclusión práctica se mantiene}: los suministros siguen siendo los que más subejecutan.
+  \item \textbf{Cuidado con la relación valor/no-ejecución.} La forma en que medimos la no-ejecución usa el valor
+    del contrato en el cálculo, así que parte de la relación \enquote{los grandes ejecutan menos} podría ser un
+    efecto de construcción y no solo del mundo real. La tomamos como una señal de apoyo.
+  \item \textbf{Con tantos datos, casi todo sale \enquote{significativo}.} Por eso no nos guiamos por el p-valor
+    sino por el tamaño del efecto; aun así, conviene no sobreinterpretar diferencias pequeñas.
+  \item \textbf{Calidad de la fuente.} Son datos administrativos reales con vacíos e inconsistencias (fechas
+    ilógicas, montos incompletos); los tratamos de forma documentada, pero cualquier conclusión hereda esas
+    limitaciones.
+  \item \textbf{Periodo.} El análisis de no-ejecución y no-liquidación se hizo sobre contratos firmados hasta
+    2023; los patrones podrían cambiar en años más recientes.
+\end{itemize}
+
+\section{Cierre}
+
+Con un equipo pequeño, la mejor apuesta es concentrar la supervisión en el \textbf{perfil de alto riesgo}
+(suministros de funcionamiento en modalidades de mayor cuantía, y contratos de valor alto), usar las
+\textbf{señales individuales} para afinar, y \textbf{no} gastar esfuerzo en criterios que no discriminan, como el
+tamaño del proveedor. En paralelo, y a nivel de entidad, \textbf{priorizar la auditoría de la liquidación} en el
+sector Salud y en las entidades territoriales, que es donde se concentra ese problema de proceso.
+
+\vspace{6pt}
+{\small\color{gris}El detalle metodológico, las pruebas estadísticas y las figuras están en los notebooks
+\col{01_entendimiento}, \col{02_limpieza} y \col{03_analisis}.}
+
+% =============================================================================
+% Anexo técnico (Entregable 1)
+% =============================================================================
+\clearpage
+\renewcommand{\parteactual}{Anexo técnico}
+\etiqueta{Entregable 1}
+
+\section{Anexo técnico: entendimiento inicial de los datos}
+
+Resumen de \col{notebooks/01_entendimiento.ipynb}, donde están el código, las tablas completas y todas las
+figuras.
+
+\subsection{Dimensiones y tipos de datos}
+
+\begin{itemize}
+  \item \textbf{196.391 contratos $\times$ 36 columnas}, firmados entre el 1 de enero de 2019 y el 31 de
+    diciembre de 2025. Cada fila es un contrato (\col{id_contrato} no se repite).
+  \item \textbf{Tipos:} 28 columnas de texto (categorías, identificadores y texto libre), 5 numéricas (cuatro
+    montos en COP y \col{dias_adicionados}) y 3 fechas. Dos campos llegan como texto aunque no deberían: la
+    duración (\enquote{245 Dia(s)}) y los campos Sí/No.
+  \item El análisis usa 22 columnas. Las otras 14 son identificadores, texto libre, datos del representante legal
+    o geografía.
+\end{itemize}
+
+\subsection{Top-5 de atributos}
+
+\begin{table}[htbp]\small
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{3.9cm} >{\raggedright\arraybackslash}p{3.4cm}
+                             >{\raggedright\arraybackslash}X}
+\toprule
+\textbf{Atributo} & \textbf{Por qué importa} & \textbf{Comportamiento} \\
+\midrule
+\col{valor_del_contrato} & Es la magnitud del riesgo & Muy sesgado a la derecha: mediana de \apx33,6 millones
+  de COP y media de \apx65.800 millones, arrastrada por unos pocos extremos (P99 $\approx$ 4.100 millones). Hay
+  188 contratos con valor $\leq 0$ y un máximo imposible de \apx$1{,}3\times10^{16}$. Se analiza en escala
+  logarítmica. \\
+\col{sector} & Cada sector compra cosas distintas, con procesos distintos & 26 sectores, muy concentrados:
+  Servicio Público (37.390), Defensa (34.585) y Salud (22.037) encabezan. \enquote{No aplica/No pertenece} es el
+  tercero más frecuente (24.465). \\
+\col{modalidad_de_contratacion} & Define cuánta competencia y control tuvo el proceso & 9 modalidades. Domina la
+  mínima cuantía (60,0\,\%), seguida de la subasta inversa (16,8\,\%); la licitación pública es apenas el
+  1,2\,\%. \\
+\col{tipo_de_contrato} & Comprar de una vez no es lo mismo que ir surtiendo & Suministros 54,3\,\% y compraventa
+  45,7\,\%. \\
+\col{dias_adicionados} & Es una de las desviaciones que se estudian & Pegada al cero: solo el 9,5\,\% de los
+  contratos tiene adición de plazo (P95 = 30 días, P99 = 122). El máximo, 14.276 días (\apx39 años), es un
+  error. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\figura{01_valor_contrato}{Distribución del valor del contrato: escala log10 (izquierda) y hasta el P99
+(derecha).}
+
+\subsection{Periodo de análisis}
+
+Los contratos recientes todavía no han terminado, así que no se puede saber si se desviaron:
+
+\begin{table}[htbp]\small\centering
+\begin{tabular}{l *{7}{r}}
+\toprule
+\textbf{Año de firma} & \textbf{2019} & \textbf{2020} & \textbf{2021} & \textbf{2022} & \textbf{2023} &
+  \textbf{2024} & \textbf{2025} \\
+\midrule
+\% en ejecución          & 0,0  & 19,0 & 24,9 & 25,4 & 29,0 & 28,6 & 37,5 \\
+\% terminado o cerrado   & 52,8 & 57,1 & 58,7 & 59,0 & 53,0 & 52,7 & 36,0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El análisis usa los contratos \textbf{firmados hasta 2023} (121.644). Para la no-ejecución del presupuesto y la
+no-liquidación, que solo se pueden medir al cierre, se usan además solo los contratos \textbf{terminados o
+cerrados} (68.351).
+
+\subsection{Calidad de datos}
+
+Se revisaron los cinco niveles donde puede aparecer un problema (atributo, registro, columna, tabla y múltiples
+tablas) y se clasificó cada hallazgo en su dimensión de calidad. El catálogo completo del notebook tiene 29
+hallazgos; en la tabla~\ref{tab:calidad} están los que más pesan. No hay duplicados exactos,
+identificadores repetidos ni errores de digitación en las categorías. Las correcciones se aplican en
+\col{notebooks/02_limpieza.ipynb}, sin eliminar filas: los casos problemáticos se marcan con columnas de control.
+
+\begin{table}[htbp]\footnotesize
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{2.5cm} >{\raggedright\arraybackslash}X
+                             >{\raggedright\arraybackslash}p{2.3cm} >{\raggedright\arraybackslash}X}
+\toprule
+\textbf{Nivel · dimensión} & \textbf{Problema} & \textbf{Contratos} & \textbf{Tratamiento} \\
+\midrule
+Atributo · completitud & \col{sector} sin sector real (\enquote{No aplica/No pertenece}, \enquote{No Definido})
+  & 24.474 (12,5\,\%) & Se conserva como categoría propia \\
+Atributo · completitud & \col{valor_pagado} en cero, en buena parte porque no se reportó & 107.639 (54,8\,\%)
+  & Medir la ejecución con \col{valor_facturado}, solo en contratos cerrados \\
+Atributo · precisión & Valor del contrato $\leq 0$ / por encima del P99.9 (máx.\ \apx$1{,}3\times10^{16}$)
+  & 188 / 197 & Nulo / winsorización en el P99.9 y escala log \\
+Atributo · precisión & Más de 3 años de plazo adicionado & 1 & Tope de 1.095 días \\
+Atributo · completitud y conformidad & Duración como texto libre; sin número utilizable (\enquote{No definido},
+  \enquote{Dia(s)}) & 20.819 (10,6\,\%) & Convertir a días; sin número $\rightarrow$ nulo \\
+Atributo · conformidad & Etiquetas con inicial minúscula en \col{estado_contrato} y \col{sector}
+  & 54.273 / 39.621 & Estandarizar la inicial \\
+Registro · consistencia & Fechas en orden imposible (firma después del fin; inicio después del fin)
+  & 2.601 / 125 & Marcar; no se calculan duraciones con fechas \\
+Registro · consistencia & Contrato \enquote{En ejecución} pero marcado como liquidado
+  & 16.634 (32,3\,\% de los que están en ejecución) & Se documenta: el campo \col{liquidaci_n} podría no
+  significar \enquote{ya se liquidó} \\
+Registro · consistencia & Facturado o pagado mayor que el valor del contrato & 214 / 177
+  & Acotar el ratio de ejecución a [0, 1] \\
+Tabla · precisión & Duplicados aproximados (mismo contrato con otro id) & 36 & Se conservan (efecto
+  despreciable) \\
+Tabla · temporalidad & Contratos de 2024–2025, muchos aún abiertos & 74.747 (38,1\,\%) & Analizar firmas hasta
+  2023 \\
+\bottomrule
+\end{tabularx}
+\caption{Principales problemas de calidad, con su nivel, dimensión y tratamiento.}\label{tab:calidad}
+\end{table}
+
+\end{document}

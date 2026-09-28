@@ -44,7 +44,9 @@ deben identificarse y tratarse de forma justificada.
 ```
 Taller 1/
 ├── Taller 1.pdf                    # Enunciado original
-├── INFORME_EJECUTIVO.md            # Entregable 4: criterios de focalización + limitaciones
+├── informe/
+│   ├── informe_ejecutivo.pdf       # Entregable 4 (criterios + limitaciones) y anexo con el Entregable 1
+│   └── informe_ejecutivo.tex       # Fuente LaTeX del informe (se compila con XeLaTeX)
 ├── data/
 │   ├── raw/                        # Dataset original sin procesar (ignorado por git)
 │   │   └── secop_bienes.parquet    # (descargar del enlace de arriba y ubicar aquí)
@@ -66,9 +68,13 @@ Taller 1/
    2. `notebooks/02_limpieza.ipynb` → genera `data/processed/secop_bienes_limpio.parquet`
    3. `notebooks/03_analisis.ipynb`
 
-4. Leer el **[informe ejecutivo](INFORME_EJECUTIVO.md)** (Entregable 4) con las conclusiones y recomendaciones.
+4. Leer el **[informe ejecutivo](informe/informe_ejecutivo.pdf)** (Entregable 4) con las conclusiones y recomendaciones; su
+   anexo técnico resume el entendimiento inicial de los datos (Entregable 1).
 
 Dependencias en `requirements.txt` / `environment.yml` (raíz del repo).
+
+El PDF del informe ya está en el repositorio. Para regenerarlo hace falta una distribución de LaTeX con XeLaTeX
+(por ejemplo, TeX Live); desde `informe/` se ejecuta `latexmk`.
 
 ## Conclusiones (insights)
 
@@ -81,6 +87,6 @@ Dependencias en `requirements.txt` / `environment.yml` (raíz del repo).
 - El **tamaño del proveedor (PyME)** no discrimina: no conviene usarlo como criterio.
 - **Perfil de mayor riesgo:** suministros de funcionamiento en modalidades de mayor cuantía (~2× el promedio).
 
-Detalle y recomendaciones priorizadas en el **[informe ejecutivo](INFORME_EJECUTIVO.md)**.
+Detalle y recomendaciones priorizadas en el **[informe ejecutivo](informe/informe_ejecutivo.pdf)**.
 
 > **Estado:** completos los cuatro entregables (notebooks 01–03 + informe ejecutivo).

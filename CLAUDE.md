@@ -39,8 +39,11 @@ dataset `secop_bienes.parquet` (196,391 × 36, SECOP II contracts 2019–2025) i
 
 ## Taller 1 architecture (notebooks are a pipeline: 01 → 02 → 03)
 
-- **`01_entendimiento`** is Deliverable 1. It covers dimensions and types, univariate analysis of the top 5
-  attributes, the catalog of data-quality problems, and the evidence for the period cut. It reads raw data only.
+- **`01_entendimiento`** is the full detail behind Deliverable 1. It covers dimensions and types, univariate
+  analysis of the top 5 attributes, the evidence for the period cut, and data quality (section 4). It reads raw
+  data only. Section 4 walks the quality levels (atributo → registro → columna → tabla → múltiples tablas) and
+  tags each finding with a course dimension. Every check calls `registrar(...)`, and the catalog in 4.7 is built
+  from those calls, so add new checks the same way.
 - **`02_limpieza`** reads raw data and writes `data/processed/secop_bienes_limpio.parquet`, which is the only
   input to 03. It keeps the original columns and adds derived ones (suffixes `_clean`, `_w`, `_bool`, `_log`).
   Key decisions:
@@ -59,9 +62,25 @@ dataset `secop_bienes.parquet` (196,391 × 36, SECOP II contracts 2019–2025) i
   non-null masks. The shared helpers are `test_categorica` (χ² + Cramér's V, which reports category rates with
   n ≥ 200) and `test_valor` (Mann-Whitney on `valor_log`). The significance level is `ALPHA = 0.05`. Hypotheses
   H1–H8 report both significant **and** non-significant results, which the rubric requires.
-- **`INFORME_EJECUTIVO.md`** is Deliverable 4. It is a plain-language report of the targeting criteria and the
-  limitations of the analysis. `figs/` holds PNGs exported by the notebooks, named with their notebook prefix
-  (`01_*`, `03_*`).
+- **`informe/informe_ejecutivo.tex`** (and its committed PDF) holds two deliverables in one file. The executive
+  report (Deliverable 4) comes first: a plain-language report of the targeting criteria and the limitations of
+  the analysis. At the end, a technical annex (Deliverable 1) is a brief summary of notebook 01. The annex quotes
+  numbers from 01's outputs, so update it when 01 changes. The report pulls figures from `../figs/` through
+  `\graphicspath`. `figs/` holds PNGs exported by the notebooks, named with their notebook prefix (`01_*`, `03_*`).
+
+## Building the report
+
+```bash
+cd "Taller 1/informe" && latexmk          # XeLaTeX via .latexmkrc; aux files go to build/ (gitignored)
+```
+
+Always rebuild and commit the PDF together with any `.tex` change; graders read the PDF.
+- **Fonts:** it uses Red Hat Text/Display (installed system fonts), with an automatic fallback to TeX Gyre
+  Heros, so it compiles on machines without them.
+- **Missing packages:** the TeX Live install is Fedora's `scheme-medium` and lacks `tikzfill`. Use core tcolorbox
+  only, with no `skins`/`most`, and install missing packages with `dnf install texlive-<pkg>`, not `tlmgr`.
+- **Special characters:** write `~`, `≤`, `×` and `≈` as `\apx`, `$\leq$`, `$\times$` and `$\approx$`. Write
+  dataset column names with `\col{...}`, which allows line breaks at underscores.
 - `Taller 1/README.md` summarizes the conclusions and status. Update it when findings change.
 
 ## Conventions in the notebooks

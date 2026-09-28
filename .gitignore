@@ -27,3 +27,6 @@ env/
 .claude/settings.local.json
 CLAUDE.local.md
 CHANGELOG.local.md
+
+# LaTeX (archivos de compilación del informe; el PDF sí se versiona)
+**/informe/build/
