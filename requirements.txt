@@ -11,6 +11,8 @@ plotly>=5.20
 # Machine learning / stats
 scikit-learn>=1.4
 statsmodels>=0.14
+xgboost>=2.0           # modelo de gradient boosting (Taller 2)
+imbalanced-learn>=0.12 # SMOTE dentro del pipeline (Taller 2)
 
 # Notebooks
 jupyterlab>=4.1
