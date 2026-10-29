@@ -16,7 +16,7 @@ repositorio: leía archivos, escribía y ejecutaba código y consultaba la web p
 |---|---|---|
 | Entendimiento (`01`) | Escribió el código de perfilado, el módulo reutilizable `calidad.py` (completitud, unicidad, validez, consistencia, IQR, negativos), los gráficos y el texto de los markdown | Determinó a mano el tipo de cada variable; definió los rangos válidos, los dominios, las equivalencias `M/F`, la regla `age > tenure` y qué revisar (IQR, negativos, filas completas) |
 | Limpieza (`02`) | Resumió los hallazgos con opciones; escribió el código, la bitácora y la verificación con `assert` | Decidió eliminar filas sin sentido y duplicados, conservar los faltantes para imputarlos en el pipeline y llevar las categorías a su variante más común |
-| Exploración (`03`) | Escribió el código de distribuciones, tasas de churn por grupo y correlación | Pidió rediseñar los gráficos (barras apiladas con conteo real, tramos en lugar de densidad) |
+| Exploración (`03`) | Escribió el código de distribuciones, tasas de churn por grupo y correlación | Revisión de los resultados (la interpretación va en la fila de interpretaciones) |
 | Modelado (`04`) | Propuso opciones; escribió el pipeline, la comparación de desbalance, la búsqueda de hiperparámetros y la selección | Eligió los modelos (logística, SVM, XGBoost), comparar SMOTE en CV, la métrica PR-AUC y las métricas adicionales; planteó y decidió **excluir género y país** por razones éticas |
 | Interpretaciones | No las escribió (quedaron como espacios por completar) | *(por completar: las redacta el equipo)* |
 
@@ -24,8 +24,8 @@ repositorio: leía archivos, escribía y ejecutaba código y consultaba la web p
 
 - **Iniciativa del equipo:** tipos de variables; rango de DataCrédito (150–950) para `credit_score`; edad entre 18 y
   100; `tenure` ≥ 0; salario ≥ 0; aceptar que el saldo puede ser negativo; regla `age > tenure`; tratar `M/F` como
-  `Male/Female`; eliminar las filas sin sentido; rediseño de los gráficos; excluir `gender` y `country`; los tres
-  modelos; comparar estrategias de desbalance; reportar precisión, recall, F1 y ROC-AUC.
+  `Male/Female`; eliminar las filas sin sentido; excluir `gender` y `country`; los tres modelos; comparar estrategias
+  de desbalance; reportar precisión, recall, F1 y ROC-AUC.
 - **Elegidas por el equipo entre opciones que propuso la IA:** partición 80/20 con CV de 5 particiones; eliminar
   duplicados; imputar con la mediana dentro del pipeline; conservar los atípicos plausibles; PR-AUC como métrica de
   selección; conservar `age`; estrategia "ninguna" para el modelo final, decidida a partir de los resultados de la
@@ -63,7 +63,6 @@ Mensajes del equipo, literales. Donde dice *[selección]*, el equipo eligió ent
 | 4 | "para el credit score, dado que el contexto menciona una fintech colombiana vamos a usar los rangos de credito que usa datacredito, es decir de 150 a 950 puntos… para age de 18 a 100… (acorde a la ley colombiana, igual verifica este dato), y tenure simplemente que sea mayor o igual a 0. Por otro lado country y gender se formatean de acuerdo al valor mas comun" | Reglas de negocio del equipo, con pedido de verificar la fuente |
 | 5 | "agrega estimated_salary, vamos a suponer que balance si puede ser negativo" | Decisión de negocio sobre los rangos |
 | 6 | "primero hagamos la limpieza en el 02 dame un resumen de los hallazgos para decidir como tratar los datos, lo que si o si va es eliminar las pocas filas con valores que no tienen sentido" + *[selección: duplicados, faltantes, atípicos]* | El equipo decide el tratamiento a partir de un resumen |
-| 7 | "como podemos rehacer esta grafica para que no sea tan confuso de leer? dado que hay columnas mas altas que otras por el % mas no por el n, adicional al % deberiamos reportar el valor en si" | Crítica del equipo a la visualización |
-| 8 | "logistic-svm-xgboost" + "primero definamos si hacer smote o como afrontar esto" | El equipo elige los modelos y pide discutir el desbalance |
-| 9 | "…estoy pensando en quitar las columnas de genero pais y edad pues quiza el modelo podria sesgarse hacia ciertos segmentos y hasta donde tengo entendido eso es un problema etico, confirmame esto por favor" | Preocupación ética planteada por el equipo |
-| 10 | "las estrategias actuales se quedan como documentacion, el modelo final va con ninguna, adicional quiero el resto de metricas, recall, precision, f1, roc auc" | Decisión final de la estrategia y métricas pedidas |
+| 7 | "logistic-svm-xgboost" + "primero definamos si hacer smote o como afrontar esto" | El equipo elige los modelos y pide discutir el desbalance |
+| 8 | "…estoy pensando en quitar las columnas de genero pais y edad pues quiza el modelo podria sesgarse hacia ciertos segmentos y hasta donde tengo entendido eso es un problema etico, confirmame esto por favor" | Preocupación ética planteada por el equipo |
+| 9 | "las estrategias actuales se quedan como documentacion, el modelo final va con ninguna, adicional quiero el resto de metricas, recall, precision, f1, roc auc" | Decisión final de la estrategia y métricas pedidas |
