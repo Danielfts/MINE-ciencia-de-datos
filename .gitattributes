@@ -1,0 +1,5 @@
+# Notebooks de Taller 2: se versionan sin salidas mientras se trabajan (filtro nbstripout).
+# El filtro se configura en cada clon; ver "Notebooks sin salidas en los commits" en el README.
+# Sin esa configuración, git ignora el filtro y los notebooks se versionan tal cual.
+Taller?2/**/*.ipynb filter=nbstripout
+Taller?2/**/*.ipynb diff=ipynb

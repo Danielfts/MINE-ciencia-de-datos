@@ -15,9 +15,20 @@ sequentially without errors**.
 ## Environment
 
 ```bash
-conda env create -f environment.yml && conda activate ciencia-de-datos   # or: pip install -r requirements.txt
-conda env update -f environment.yml --prune                             # after editing deps
+uv venv .venv --python 3.12 && uv pip install --python .venv/bin/python -r requirements.txt   # preferred
+conda env create -f environment.yml && conda activate ciencia-de-datos   # alternative
 ```
+
+Locally, the project uses the uv venv at `.venv/` (gitignored). It is registered as the Jupyter kernel
+`ciencia-de-datos`, and VS Code points to `.venv/bin/python`. Run headless checks with `.venv/bin/python -m nbconvert`.
+pandas is pinned `<3`, because the notebooks' committed outputs come from pandas 2.x, and pandas 3 prints text columns
+as `str`.
+
+**nbstripout:** `.gitattributes` routes `Taller?2/**/*.ipynb` through the `nbstripout` git filter, so Taller 2
+notebooks are committed without outputs while local copies keep them. The filter command lives in each clone's
+`.git/config` (see the root README). Taller 1's notebooks are deliberately excluded: they are graded with their
+outputs. Graders read outputs on GitHub, so before the final delivery commit of a taller, remove its line from
+`.gitattributes`, re-run the notebooks, and commit them executed.
 
 When you add a dependency, add it to **both** `requirements.txt` and `environment.yml`. `pyarrow` is needed for
 the `.parquet` I/O.

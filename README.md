@@ -1,31 +1,61 @@
 # Ciencia de Datos — Talleres
 
-Repositorio para los talleres (workshops) del curso de Ciencia de Datos. Cada taller vive en su
-propia carpeta (por ejemplo `Taller 1/`) con sus propios datos y notebooks, y todos comparten un
-único entorno de Python con las librerías generales de ciencia de datos.
+Repositorio de los talleres del curso MINE-4101 *Ciencia de Datos Aplicada* (Universidad de los Andes, 2026-20).
+
+**Integrantes:** Daniel Triviño · Nicolás Bedoya
+
+Cada taller vive en su propia carpeta, con su enunciado, datos, notebooks, figuras, informe y README. Todos comparten un
+único entorno de Python definido en la raíz.
+
+| Taller | Tema | README |
+|---|---|---|
+| Taller 1 | Supervisión de la contratación pública de bienes (SECOP II): calidad de datos, pruebas de hipótesis y criterios de focalización | [Taller 1/README.md](Taller%201/README.md) |
+| Taller 2 | Predicción de abandono de clientes bancarios para FinAlpes: modelos de clasificación, evaluación, interpretabilidad y generación de valor | [Taller 2/README.md](Taller%202/README.md) |
 
 ## Estructura
 
 ```
 .
 ├── Taller 1/
-│   ├── Taller 1.pdf      # Enunciado del taller
-│   ├── data/
-│   │   ├── raw/          # Datos crudos, sin procesar (ignorados por git)
-│   │   └── processed/    # Datos limpios/derivados (ignorados por git)
-│   └── notebooks/        # Notebooks de exploración y desarrollo
-├── requirements.txt      # Dependencias para pip / venv
-└── environment.yml        # Dependencias equivalentes para conda
+│   ├── Taller 1.pdf          # Enunciado
+│   ├── data/                 # raw/ y processed/ (ignorados por git; ver su README para descargar el dataset)
+│   ├── notebooks/            # 01 → 03, se ejecutan en orden
+│   ├── figs/                 # Figuras exportadas por los notebooks
+│   ├── informe/              # Informe ejecutivo (LaTeX + PDF)
+│   ├── referencias/          # Fuentes oficiales para interpretar los datos
+│   └── README.md
+├── Taller 2/
+│   ├── Taller2.pdf           # Enunciado
+│   ├── churn.csv             # Dataset (incluido)
+│   ├── data/processed/       # Generados por los notebooks (ignorados por git)
+│   ├── notebooks/            # 01 → 07, se ejecutan en orden
+│   ├── figs/
+│   ├── informe/              # Informe ejecutivo (LaTeX + PDF)
+│   ├── declaracion_IA.md     # Declaración de uso de IA generativa
+│   └── README.md
+├── requirements.txt          # Dependencias para pip / uv
+└── environment.yml           # Dependencias equivalentes para conda
 ```
-
-Al agregar un nuevo taller, crea una carpeta `Taller N/` con su enunciado y sus propias
-subcarpetas `data/` y `notebooks/`, siguiendo el mismo patrón que `Taller 1/`.
 
 ## Configuración del entorno
 
-Puedes usar **pip** o **conda**, según tu preferencia.
+Se puede usar **uv**, **pip** o **conda**. Los tres instalan lo mismo; `requirements.txt` y `environment.yml` se
+mantienen sincronizados.
 
-### Opción A: pip + venv
+### Opción A: uv (recomendada)
+
+```bash
+uv venv .venv --python 3.12
+uv pip install --python .venv/bin/python -r requirements.txt
+source .venv/bin/activate   # En Windows: .venv\Scripts\activate
+
+# Registrar el kernel para Jupyter / VS Code (una sola vez)
+python -m ipykernel install --user --name ciencia-de-datos --display-name "Python 3.12 (ciencia-de-datos, uv)"
+```
+
+En VS Code, seleccione el intérprete `.venv/bin/python` o el kernel "Python 3.12 (ciencia-de-datos, uv)".
+
+### Opción B: pip + venv
 
 ```bash
 python3 -m venv .venv
@@ -33,7 +63,7 @@ source .venv/bin/activate   # En Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Opción B: conda
+### Opción C: conda
 
 ```bash
 conda env create -f environment.yml
@@ -48,22 +78,47 @@ conda env update -f environment.yml --prune
 
 ## Librerías incluidas
 
-- **Análisis de datos:** numpy, pandas, scipy
+- **Análisis de datos:** numpy, pandas (2.x), scipy, pyarrow (lectura y escritura de `.parquet`)
 - **Visualización:** matplotlib, seaborn, plotly
-- **Machine learning / estadística:** scikit-learn, statsmodels
+- **Machine learning / estadística:** scikit-learn, statsmodels, xgboost, imbalanced-learn
+- **Interpretabilidad:** shap, lime
 - **Notebooks:** jupyterlab, notebook, ipykernel
 - **Utilidades:** openpyxl, requests, tqdm, python-dotenv
 
-## Uso de Jupyter
+## Ejecución
 
-Con el entorno activado:
+Con el entorno activado, los notebooks de cada taller se ejecutan **en orden** desde su carpeta `notebooks/`, porque
+usan rutas relativas como `../data` y `../figs`. El orden está en el README de cada taller. Para comprobar que un
+notebook corre de principio a fin sin interfaz:
 
 ```bash
-jupyter lab
+cd "Taller 2/notebooks"
+jupyter nbconvert --to notebook --execute --inplace 01_entendimiento.ipynb
 ```
+
+### Notebooks sin salidas en los commits
+
+Mientras se trabajan, los notebooks de **Taller 2** se versionan sin salidas, para que los diffs muestren solo el código
+y el texto. Lo hace el filtro [nbstripout](https://github.com/kynan/nbstripout), declarado en `.gitattributes`. La
+copia local de cada notebook conserva sus salidas; solo se limpian en el commit. Para activarlo en un clon, una vez y
+desde la raíz:
+
+```bash
+git config filter.nbstripout.clean ".venv/bin/python -m nbstripout"
+git config filter.nbstripout.smudge cat
+git config diff.ipynb.textconv ".venv/bin/python -m nbstripout -t"
+```
+
+Con conda, reemplace `.venv/bin/python` por `python` con el entorno activado. Un clon sin esta configuración no se ve
+afectado: git ignora el filtro y los notebooks se versionan tal cual.
+
+Los informes ejecutivos (PDF) ya están en el repositorio. Para regenerarlos hace falta LaTeX con XeLaTeX (por ejemplo,
+TeX Live): desde la carpeta `informe/` de cada taller se ejecuta `latexmk`.
 
 ## Datos
 
-Las carpetas `data/raw/` y `data/processed/` están en `.gitignore` para mantener el repositorio
-liviano. Si necesitas versionar un dataset pequeño de ejemplo, agrégalo explícitamente con
-`git add -f`.
+Las carpetas `data/raw/` y `data/processed/` están en `.gitignore` para mantener el repositorio liviano.
+- **Taller 1:** el dataset se descarga del enlace en su README.
+- **Taller 2:** el dataset (`churn.csv`) está incluido.
+
+Los archivos de `data/processed/` los generan los notebooks.
