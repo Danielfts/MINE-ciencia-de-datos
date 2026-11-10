@@ -14,7 +14,17 @@ adaptarse a un banco colombiano con estos supuestos:
 - la campaña convence al 30 % de los clientes que iban a abandonar, pero se paga por todos los contactados;
 - el ingreso anual por cliente activo es de COP 500.000 a 900.000.
 
-<!-- TODO: revisar la redacción del enunciado. -->
+## Objetivo y alcance
+
+**Objetivo:** construir un modelo que prediga qué clientes van a abandonar el banco. También busca explicar cómo
+decide y estimar cuánto valor genera una campaña de retención dirigida con él.
+
+**Alcance:**
+- **Qué cubre:** una prueba de concepto con la muestra europea del enunciado. Incluye limpieza, comparación de tres
+  modelos de clasificación (regresión logística, SVM y XGBoost), evaluación en un conjunto de prueba reservado,
+  interpretabilidad (ICE, LIME y SHAP) y un cálculo paramétrico de valor para un banco colombiano promedio.
+- **Qué no cubre:** el despliegue del modelo ni la validación con datos de un banco colombiano.
+- **Variables excluidas:** el modelo no usa el género ni el país del cliente, por decisión ética.
 
 ## Entregables
 
@@ -37,7 +47,7 @@ Taller 2/
 ├── churn.csv                       # Dataset (incluido)
 ├── declaracion_IA.md               # Entregable 7
 ├── informe/
-│   ├── informe_ejecutivo.pdf       # Entregable 6, con anexo técnico de los Entregables 1 a 5
+│   ├── informe_ejecutivo.pdf       # Entregable 6 (2 páginas; el detalle está en los notebooks)
 │   └── informe_ejecutivo.tex       # Fuente LaTeX (se compila con XeLaTeX)
 ├── data/processed/                 # Generados por los notebooks (ignorados por git)
 │   ├── churn_limpio.parquet        # 02
@@ -50,7 +60,7 @@ Taller 2/
 │   ├── 03_exploracion.ipynb        # Entregable 1: distribuciones y relación con el churn
 │   ├── 04_modelado.ipynb           # Entregable 2: partición, desbalance, hiperparámetros, selección
 │   ├── 05_evaluacion.ipynb         # Entregable 3: métricas en prueba, IC, comparación, calibración
-│   ├── 06_interpretabilidad.ipynb  # Entregable 4 (TODO)
+│   ├── 06_interpretabilidad.ipynb  # Entregable 4: ICE, LIME, SHAP y comparación de técnicas
 │   └── 07_valor.ipynb              # Entregable 5: valor esperado (Provost), punto de equilibrio, sensibilidad
 ├── figs/                           # Figuras exportadas por los notebooks (prefijo = notebook)
 └── README.md
@@ -66,34 +76,56 @@ Taller 2/
    4. `04_modelado.ipynb` → genera la partición y los modelos en `data/processed/`. Tarda unos minutos por la búsqueda
       de hiperparámetros.
    5. `05_evaluacion.ipynb`
-   6. `06_interpretabilidad.ipynb` <!-- TODO -->
+   6. `06_interpretabilidad.ipynb`
    7. `07_valor.ipynb`
 3. Leer el **[informe ejecutivo](informe/informe_ejecutivo.pdf)** (Entregable 6).
 
 El PDF del informe ya está en el repositorio. Para regenerarlo hace falta LaTeX con XeLaTeX (por ejemplo, TeX Live):
 desde `informe/` se ejecuta `latexmk`.
 
-## Conclusiones (insights)
+## Dependencias
 
-<!-- TODO: completar con los resultados del 06 y el 07 y revisar la redacción. Las cifras del 05 ya están verificadas. -->
+Python 3.12 con el entorno de la raíz del repositorio ([`requirements.txt`](../requirements.txt) o
+[`environment.yml`](../environment.yml)). Las principales librerías de este taller son:
+- **Datos:** pandas, numpy y pyarrow (archivos `.parquet`);
+- **Modelos:** scikit-learn, xgboost e imbalanced-learn (SMOTE);
+- **Estadística:** scipy y statsmodels (McNemar);
+- **Interpretabilidad:** shap y lime;
+- **Gráficos:** matplotlib y seaborn.
+
+Las instrucciones de instalación (uv, pip o conda) están en el [README de la raíz](../README.md).
+
+## Conclusiones (insights)
 
 - **Modelo elegido: XGBoost.** Es el que mejor ordena a los clientes por riesgo. En prueba obtiene PR-AUC 0,662
   (IC 95 % 0,62–0,70), 3,2 veces la línea base, y supera de forma relevante a la regresión logística. Frente a la SVM
   ordena mejor, pero en el punto de operación la diferencia no es concluyente.
-- **Para la campaña:** con su umbral contacta al 18 % de los clientes; 6 de cada 10 contactados sí iban a abandonar, y
-  se alcanza a más de la mitad de los que abandonan. El 10 % más riesgoso concentra el 38 % de los abandonos.
+- **Para la campaña:** con su umbral (0,33), en la muestra de prueba contacta al 18 % de los clientes; 6 de cada 10
+  contactados sí iban a abandonar, y se alcanza a más de la mitad de los que abandonan. El 10 % más riesgoso concentra
+  el 38 % de los abandonos.
 - **Probabilidades calibradas.** Se pueden usar directamente para calcular la ganancia esperada.
 - **Auditoría:** el modelo subestima el riesgo en Alemania y en mujeres, variables que no entran al modelo por
   decisión ética. Hay que revisarlo antes de desplegar.
-- **Cómo decide el modelo:** <!-- TODO (06) -->
+- **Cómo decide el modelo:** la edad, el número de productos y la actividad suman el 90 % de la importancia SHAP.
+  - **Edad:** el riesgo sube hasta los 50–59 años y luego baja.
+  - **Productos:** 2 productos es lo más protector; 3 o 4 disparan el riesgo.
+  - **Actividad:** la inactividad sube el riesgo y amplifica el efecto de la edad. A los 55 años, el riesgo medio es
+    del 68 % en inactivos y del 30 % en activos.
+
+  ICE, LIME, SHAP y la regresión logística coinciden. Son asociaciones, no causas.
 - **Valor para el banco:** para un banco de 20.000 clientes con 15 % de abandono, el modelo deja \~COP 13.500 por
   cliente evaluado y por año (\~COP 271 millones al año) y recupera una inversión de \~COP 61 millones en \~2,7 meses.
   Es rentable mientras la precisión supere 0,11 (la del modelo es 0,52). El resultado depende sobre todo del costo de
   la oferta, que hay que confirmar con un piloto. Fijar el umbral por ganancia (\~0,15) en lugar de por F1 sube la
   ganancia \~18 %, pero implica contactar al 40 % de la base.
-- **Recomendación:** <!-- TODO -->
+- **Recomendación:** implementar el modelo como piloto. Se contactaría a los clientes con riesgo ≥ 0,33 (\~16 % de
+  la base del banco, que abandona menos que la muestra) y se reservaría un grupo de control sin oferta. El piloto
+  sirve para medir el costo real de la oferta y la tasa real de retención, que hoy son supuestos. Antes de escalar, hay que reentrenar con clientes del propio banco y
+  sumar datos de comportamiento (transacciones, reclamos, uso de canales).
 
-Detalle en el **[informe ejecutivo](informe/informe_ejecutivo.pdf)**.
+Detalle en el **[informe ejecutivo](informe/informe_ejecutivo.pdf)**. Las limitaciones están en el informe y en la
+sección 7 del `07_valor`.
 
-> **Estado:** Entregables 1, 2 y 3 completos (notebooks 01–05). Pendientes: 4 (06), 5 (07), 6 (informe, solo esqueleto)
-> y 7 (declaración, en borrador).
+## Declaración de uso de IA generativa
+
+Está en [`declaracion_IA.md`](declaracion_IA.md) (Entregable 7).

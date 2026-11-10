@@ -87,7 +87,8 @@ conda env update -f environment.yml --prune
 
 ## Ejecución
 
-Con el entorno activado, los notebooks de cada taller se ejecutan **en orden** desde su carpeta `notebooks/`, porque
+Los notebooks están versionados **con sus salidas**, así que se pueden leer en GitHub sin ejecutarlos. Para
+reproducirlos, con el entorno activado, se ejecutan **en orden** desde su carpeta `notebooks/`, porque
 usan rutas relativas como `../data` y `../figs`. El orden está en el README de cada taller. Para comprobar que un
 notebook corre de principio a fin sin interfaz:
 
@@ -95,22 +96,6 @@ notebook corre de principio a fin sin interfaz:
 cd "Taller 2/notebooks"
 jupyter nbconvert --to notebook --execute --inplace 01_entendimiento.ipynb
 ```
-
-### Notebooks sin salidas en los commits
-
-Mientras se trabajan, los notebooks de **Taller 2** se versionan sin salidas, para que los diffs muestren solo el código
-y el texto. Lo hace el filtro [nbstripout](https://github.com/kynan/nbstripout), declarado en `.gitattributes`. La
-copia local de cada notebook conserva sus salidas; solo se limpian en el commit. Para activarlo en un clon, una vez y
-desde la raíz:
-
-```bash
-git config filter.nbstripout.clean ".venv/bin/python -m nbstripout"
-git config filter.nbstripout.smudge cat
-git config diff.ipynb.textconv ".venv/bin/python -m nbstripout -t"
-```
-
-Con conda, reemplace `.venv/bin/python` por `python` con el entorno activado. Un clon sin esta configuración no se ve
-afectado: git ignora el filtro y los notebooks se versionan tal cual.
 
 Los informes ejecutivos (PDF) ya están en el repositorio. Para regenerarlos hace falta LaTeX con XeLaTeX (por ejemplo,
 TeX Live): desde la carpeta `informe/` de cada taller se ejecuta `latexmk`.
