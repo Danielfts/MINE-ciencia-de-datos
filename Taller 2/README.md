@@ -51,7 +51,7 @@ Taller 2/
 │   ├── 04_modelado.ipynb           # Entregable 2: partición, desbalance, hiperparámetros, selección
 │   ├── 05_evaluacion.ipynb         # Entregable 3: métricas en prueba, IC, comparación, calibración
 │   ├── 06_interpretabilidad.ipynb  # Entregable 4 (TODO)
-│   └── 07_valor.ipynb              # Entregable 5 (TODO)
+│   └── 07_valor.ipynb              # Entregable 5: valor esperado (Provost), punto de equilibrio, sensibilidad
 ├── figs/                           # Figuras exportadas por los notebooks (prefijo = notebook)
 └── README.md
 ```
@@ -67,7 +67,7 @@ Taller 2/
       de hiperparámetros.
    5. `05_evaluacion.ipynb`
    6. `06_interpretabilidad.ipynb` <!-- TODO -->
-   7. `07_valor.ipynb` <!-- TODO -->
+   7. `07_valor.ipynb`
 3. Leer el **[informe ejecutivo](informe/informe_ejecutivo.pdf)** (Entregable 6).
 
 El PDF del informe ya está en el repositorio. Para regenerarlo hace falta LaTeX con XeLaTeX (por ejemplo, TeX Live):
@@ -86,7 +86,11 @@ desde `informe/` se ejecuta `latexmk`.
 - **Auditoría:** el modelo subestima el riesgo en Alemania y en mujeres, variables que no entran al modelo por
   decisión ética. Hay que revisarlo antes de desplegar.
 - **Cómo decide el modelo:** <!-- TODO (06) -->
-- **Valor para el banco:** <!-- TODO (07): ganancia esperada por predicción, punto de equilibrio, sensibilidad -->
+- **Valor para el banco:** para un banco de 20.000 clientes con 15 % de abandono, el modelo deja \~COP 13.500 por
+  cliente evaluado y por año (\~COP 271 millones al año) y recupera una inversión de \~COP 61 millones en \~2,7 meses.
+  Es rentable mientras la precisión supere 0,11 (la del modelo es 0,52). El resultado depende sobre todo del costo de
+  la oferta, que hay que confirmar con un piloto. Fijar el umbral por ganancia (\~0,15) en lugar de por F1 sube la
+  ganancia \~18 %, pero implica contactar al 40 % de la base.
 - **Recomendación:** <!-- TODO -->
 
 Detalle en el **[informe ejecutivo](informe/informe_ejecutivo.pdf)**.
