@@ -1,7 +1,7 @@
-% Informe ejecutivo (Entregable 6) + anexo técnico (resumen de los Entregables 1–5) — Taller 2, MINE-4101.
+% Informe ejecutivo (Entregable 6) — Taller 2, MINE-4101. Objetivo: dos páginas; el detalle está en los notebooks.
 % Compilar con XeLaTeX desde esta carpeta:  latexmk   (la configuración está en .latexmkrc)
 %
-% ESQUELETO: solo encabezados y comentarios TODO. Toda cifra que se cite debe salir de la salida de un notebook.
+% Toda cifra que se cite sale de la salida de un notebook (la fuente está en un comentario en cada sección).
 \documentclass[11pt,a4paper]{article}
 
 % --- Idioma y tipografía -----------------------------------------------------
@@ -32,7 +32,7 @@
 \usepackage[autostyle=false,style=english]{csquotes}
 
 % --- Página, color y estructura ----------------------------------------------
-\usepackage[a4paper,top=2.6cm,bottom=2.4cm,left=2.4cm,right=2.4cm,headheight=14pt]{geometry}
+\usepackage[a4paper,top=2.2cm,bottom=2.0cm,left=2.2cm,right=2.2cm,headheight=14pt]{geometry}
 \usepackage[table]{xcolor}
 \definecolor{marino}{HTML}{0B2545}
 \definecolor{acento}{HTML}{13A89E}
@@ -64,8 +64,8 @@
 \usepackage{titlesec}
 \setcounter{secnumdepth}{0}
 \newcommand{\conbarra}[1]{#1\par\nobreak\vspace{3pt}{\color{acento}\rule{2.4cm}{2.2pt}}}
-\titleformat{\section}[block]{\displayfont\LARGE\bfseries\color{marino}}{}{0pt}{\conbarra}
-\titlespacing*{\section}{0pt}{20pt}{10pt}
+\titleformat{\section}{\displayfont\Large\bfseries\color{marino}}{}{0pt}{}
+\titlespacing*{\section}{0pt}{12pt}{2pt}
 \titleformat{\subsection}{\displayfont\large\bfseries\color{marino}}{}{0pt}{}
 \titlespacing*{\subsection}{0pt}{14pt}{5pt}
 
@@ -111,183 +111,132 @@
 \begin{document}
 
 % =============================================================================
-% Portada
+% Encabezado (en lugar de portada: el informe apunta a dos páginas)
 % =============================================================================
-\begin{titlepage}
-\begin{tikzpicture}[remember picture, overlay]
-  \coordinate (corte) at ([yshift=-0.60\paperheight]current page.north west);
-  \fill[marino] (current page.north west) rectangle ([yshift=-0.60\paperheight]current page.north east);
-  \fill[acento] (corte) rectangle ([yshift=-4pt]corte -| current page.east);
-  % Motivo geométrico discreto
-  \foreach \r/\o in {3.2/0.10, 4.6/0.07, 6.0/0.05, 7.4/0.035}
-    \draw[white, opacity=\o, line width=1.1pt]
-      ([xshift=-1.8cm, yshift=-4.2cm]current page.north east) circle (\r cm);
-  \fill[acento] ([xshift=-1.8cm, yshift=-4.2cm]current page.north east) circle (4pt);
+\thispagestyle{empty}
+\begin{tcolorbox}[colback=marino, colframe=marino, boxrule=0pt, arc=0pt, left=16pt, right=16pt, top=12pt,
+    bottom=12pt, coltext=white]
+  {\etiquetafont\small\bfseries\spaceskip=0.7em\relax\color{acento}INFORME EJECUTIVO}\par\vspace{6pt}
+  {\raggedright\titulofont\fontsize{18}{22}\selectfont\bfseries Predicción de abandono de clientes para FinAlpes}\par
+  \vspace{6pt}
+  {\small\color{white!80!marino}Daniel Triviño · Nicolás Bedoya \quad|\quad Taller 2 · MINE-4101 · Uniandes \quad|\quad
+  9 de noviembre de 2026}
+\end{tcolorbox}
 
-  \node[anchor=south west, text width=0.72\paperwidth, align=left, inner sep=0pt]
-    at ([xshift=2.4cm, yshift=2.2cm]corte) {%
-      {\etiquetafont\small\bfseries\spaceskip=0.7em\relax\color{acento}INFORME EJECUTIVO}\\[14pt]
-      {\titulofont\fontsize{34}{40}\selectfont\bfseries\spaceskip=0.28em\relax\color{white}Predicción de abandono\\ de clientes para FinAlpes}\\[16pt]
-      {\displaylight\Large\color{white!85!marino}Prueba de concepto de un modelo de \emph{churn}\\
-       para focalizar campañas de retención bancaria}};
+% Cifras: 05_evaluacion (PR-AUC 3,2 veces la línea base) y 07_valor (ganancia por cliente y mes de equilibrio).
+\begin{destacado}
+\textbf{En una frase.} Un modelo que ordena a los clientes por riesgo de abandono permite dirigir la campaña de
+retención al \apx16\,\% más riesgoso de la base. En un banco de 20.000 clientes deja \apx COP 271 millones al año y
+recupera su costo en menos de tres meses. Recomendamos implementarlo primero como piloto.
+\end{destacado}
 
-  \node[anchor=north west, text width=0.72\paperwidth, align=left, inner sep=0pt]
-    at ([xshift=2.4cm, yshift=-1.6cm]corte) {%
-      {\displayfont\large\bfseries\color{marino}Daniel Triviño · Nicolás Bedoya}\\[6pt]
-      {\color{gris}Taller 2 · MINE-4101 Ciencia de Datos Aplicada\\
-       Departamento de Ingeniería de Sistemas y Computación\\
-       Universidad de los Andes · Semestre 2026-20}};
-
-  \node[anchor=south west, text width=0.80\paperwidth, align=left, inner sep=0pt]
-    at ([xshift=2.4cm, yshift=2.0cm]current page.south west) {%
-      {\color{claro!60!gris}\rule{\linewidth}{0.6pt}}\\[6pt]
-      {\small\color{gris}\textbf{Contenido:} informe ejecutivo (Entregable 6) · anexo técnico
-       (Entregables 1--5)\hfill\mbox{9 de noviembre de 2026}}};
-\end{tikzpicture}
-\end{titlepage}
+\cifra{3,2$\times$}{mejor que contactar al azar para encontrar a quienes se van (PR-AUC)}\hfill
+\cifra{13.500}{COP de ganancia esperada por cliente evaluado, al año}\hfill
+\cifra{2,7 meses}{para recuperar la inversión de \apx COP 61 millones}
 
 % =============================================================================
-% Informe ejecutivo (Entregable 6)
+\section{El problema y los datos}
+% Fuentes: Taller2.pdf, 01_entendimiento, 02_limpieza.
+
+FinAlpes quiere detectar a tiempo a los clientes que van a abandonar el banco para ofrecerles una campaña de
+retención. La campaña convence al 30\,\% de quienes iban a irse, pero se paga por cada cliente contactado. Contactar a
+todos es caro, y contactar al azar desperdicia la mayoría de las ofertas. La pregunta es \textbf{a quién contactar y
+si vale la pena}.
+
+Usamos una muestra de 10.045 clientes europeos de un banco, con 11 variables de perfil comercial. El 20,4\,\%
+abandonó. La muestra traía errores: el 11\,\% de las filas tenía algún dato faltante, y había 45 filas duplicadas, 95
+países o géneros mal escritos y 15 filas con valores imposibles (por ejemplo, edades de 130 años). Tras la limpieza
+quedaron 9.985 clientes. Los faltantes se completan dentro del modelo.
+
 % =============================================================================
-\etiqueta{Entregable 6}
+\section{El modelo}
+% Fuentes: 04_modelado, 05_evaluacion.
 
-\section{En una frase}
+Comparamos tres modelos (regresión logística, SVM y XGBoost) con el 80\,\% de los datos, y reservamos el 20\,\%
+restante para una única evaluación final. Los elegimos por su capacidad de \emph{ordenar} a los clientes por riesgo
+(PR-AUC). La exactitud no sirve aquí: decir que nadie abandona ya acierta el 79,6\,\%. \textbf{XGBoost fue el mejor}:
+PR-AUC de 0,662 en prueba, 3,2 veces la de contactar al azar. Por decisión ética, el modelo \textbf{no usa el género
+ni el país} del cliente.
 
-% TODO: resumen ejecutivo en un recuadro \begin{destacado}: qué problema resuelve el modelo para FinAlpes y la
-%   recomendación final en una línea (implementar o no, con qué umbral de contacto y con qué ganancia esperada).
-%   Se escribe al final, cuando estén 05_evaluacion, 06_interpretabilidad y 07_valor.
-% TODO: opcional, tres tarjetas \cifra{...}{...} (p. ej. tasa de abandono en los datos, PR-AUC en prueba,
-%   ganancia esperada para el banco de 20.000 clientes). Cifras de 01_entendimiento, 05_evaluacion y 07_valor.
+% =============================================================================
+\section{Hallazgos}
+% Fuentes: 05_evaluacion (umbral 0,33, lift, auditoría), 06_interpretabilidad (SHAP, ICE).
 
-\section{La pregunta de negocio}
+\begin{enumerate}
+  \item \textbf{El modelo concentra el abandono.} En la base de prueba, 6 de cada 10 clientes que marca sí iban a
+    irse, frente a 2 de cada 10 al azar. Además, alcanza a más de la mitad de quienes se van. El 10\,\% más
+    riesgoso concentra el 38\,\% de los abandonos.
+  \item \textbf{Tres variables explican casi todo.} La edad, el número de productos y la actividad del cliente
+    suman el 90\,\% del peso de las predicciones. El riesgo sube con la edad hasta los 50--59 años. Con 2 productos
+    es mínimo, y con 3 o 4 se dispara.
+  \item \textbf{La inactividad es la señal más accionable.} Un cliente inactivo de 55 años tiene, en promedio, un
+    riesgo del 68\,\%, frente al 30\,\% de uno activo de la misma edad. Es una asociación, no una causa: activar al
+    cliente no garantiza retenerlo.
+  \item \textbf{Hay puntos ciegos.} El modelo casi no detecta el abandono de clientes con 2 productos o menores de 40
+    años, y subestima el riesgo en Alemania y en mujeres. Para verlos hacen falta datos de comportamiento
+    (transacciones, reclamos, uso de canales), no otro algoritmo.
+\end{enumerate}
 
-% TODO: contexto en lenguaje simple (Taller2.pdf): FinAlpes quiere detectar a tiempo a los clientes que van a
-%   abandonar el banco para ofrecerles una campaña de retención. Banco de prueba de 20.000 clientes; la campaña
-%   convence al 30 % de los que iban a irse, pero se paga por cada cliente contactado; ingreso anual por cliente
-%   activo de COP 500.000–900.000; deserción minorista de referencia \apx15 %.
-% TODO: la pregunta que responde el informe (a quién contactar y si vale la pena) y la brecha entre esa pregunta y
-%   lo que los datos permiten medir (muestra de clientes europeos usada como prueba de concepto).
-
-\section{Qué datos usamos}
-
-% TODO: dimensiones del dataset, tipos de variables, tasa de abandono observada (desbalance) y los problemas de
-%   calidad que más pesan con su tratamiento. Fuente: 01_entendimiento (perfilado y calidad) y 02_limpieza
-%   (filas eliminadas, duplicados, categorías unificadas, faltantes que se imputan en el pipeline).
-% TODO: uno o dos patrones de la exploración que anticipan al modelo (tasas de churn por grupo). Fuente:
-%   03_exploracion.
-% \figura{01_balance_churn}{TODO: pie de figura.}
-% \figura{03_tasa_churn_por_grupo}{TODO: pie de figura.}
-
-\section{Cómo construimos el modelo}
-
-% TODO: en lenguaje simple, qué se comparó y por qué se eligió el modelo final. Fuente: 04_modelado.
-%   - División 80/20 estratificada; validación cruzada de 5 particiones para los hiperparámetros.
-%   - Modelos: regresión logística, SVM y XGBoost; tratamiento del desbalance (comparación con SMOTE en CV).
-%   - Criterio de selección: PR-AUC (por qué es la métrica adecuada con clases desbalanceadas). Modelo elegido:
-%     XGBoost.
-%   - Exclusión de \col{gender} y \col{country} por razones éticas (decisión del equipo; explicar el porqué).
-% \figura{04_comparacion_desbalance}{TODO: pie de figura.}
-
-\section{Qué tan bien predice}
-
-% TODO: métricas del modelo elegido en el conjunto de prueba (PR-AUC, ROC-AUC, precisión, exhaustividad, F1,
-%   matriz de confusión) y qué significa cada una para FinAlpes: de cada 100 contactados, cuántos sí iban a irse;
-%   de cada 100 que se iban, cuántos detecta. Comparación con los otros modelos y oportunidades de mejora.
-%   Fuente: 05_evaluacion (Entregable 3).
-% \figura{04_curvas_pr_roc}{TODO: pie de figura.}
-% \figura{05_TODO}{TODO: matriz de confusión o métricas por umbral, según exporte 05_evaluacion.}
-
-\section{Cómo decide el modelo}
-
-% TODO: interpretación global (qué variables pesan más y en qué dirección) y local (dos o tres clientes de
-%   ejemplo: por qué el modelo los marca o no). Técnicas: SHAP, ICE y LIME. Sin etiquetas verbales de tamaño de
-%   efecto; recordar que asociación no es causalidad. Fuente: 06_interpretabilidad (Entregable 4).
-% \figura{06_TODO}{TODO: importancia global (SHAP).}
-% \figura{06_TODO}{TODO: explicación de una predicción individual.}
-
+% =============================================================================
 \section{Cuánto vale para el banco}
+% Fuente: 07_valor (Entregable 5). Método: diapositivas de generación de valor (Provost y Fawcett, cap. 7) y
+% Práctica 4, act. 3 del sitio del curso.
 
-% TODO: introducción breve al cálculo de valor para un banco promedio de 20.000 clientes. Fuente: 07_valor
-%   (Entregable 5).
+Cada acierto vale $r \cdot V - c$, donde $r$ es la tasa de éxito de la oferta, $V$ el ingreso anual del cliente y
+$c$ el costo de la oferta: se retiene al 30\,\% y se paga la oferta. Cada falsa alarma cuesta $c$. Los supuestos
+para un banco promedio son:
 
-\subsection{Supuestos y fuentes}
+{\small\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright}p{4.4cm} >{\raggedright}p{4.3cm} >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Supuesto} & \textbf{Valor} & \textbf{Fuente} \\
+\midrule
+Clientes · abandono anual & 20.000 · 15\,\% & Enunciado (promedio de la banca minorista) \\
+Éxito de la oferta ($r$) & 30\,\% de los que iban a irse & Enunciado \\
+Ingreso anual por cliente ($V$) & COP 500.000--900.000 (central: 700.000) & Enunciado (reporte 6-K de Nu, 2026) \\
+Costo por contacto ($c$) & $V/30$ \apx COP 23.300 & Ejercicio de churn del curso (oferta de 50 por cliente de
+  1.500) \\
+Inversión inicial & \apx COP 61 millones & Presupuesto de la Práctica 4 del curso, con el costo-hora de un
+  científico de datos colombiano \\
+\bottomrule
+\end{tabularx}}
 
-% TODO: tabla con cada supuesto paramétrico, su valor y su fuente: ingreso anual por cliente activo
-%   (COP 500.000–900.000), tasa de éxito de la campaña (30 %), tasa de abandono (\apx15 %), costo por cliente
-%   contactado y costo de implementación del modelo (con fuentes y estadísticas recientes). Fuente: 07_valor.
+\begin{itemize}
+  \item \textbf{Ganancia esperada:} \apx COP 13.500 por cliente evaluado y por año, \apx COP 22,6 millones al mes en
+    toda la base. La inversión se recupera en \textbf{2,7 meses}, y el ROI a 12 meses es del 344\,\%.
+  \item \textbf{Margen de seguridad:} cada contacto es rentable mientras más del 11\,\% de los contactados iban a
+    irse. Con la tasa de abandono del banco, el modelo acierta en \apx1 de cada 2.
+  \item \textbf{Sensibilidad:} la ganancia es positiva en 11 de las 12 combinaciones de ingreso (COP 500.000--900.000)
+    y costo de la oferta (COP 10.000--100.000). Solo se pierde dinero si la oferta cuesta COP 100.000 y el cliente
+    deja COP 500.000. El supuesto que más pesa es el \textbf{costo de la oferta}.
+  \item \textbf{Umbral:} contactar al 40\,\% de la base en lugar del 16\,\% sube la ganancia \apx18\,\%, si el
+    banco tiene capacidad para esa campaña.
+\end{itemize}
 
-\subsection{Ganancia esperada por predicción}
-
-% TODO: ganancia esperada por cliente evaluado con el umbral elegido, y cómo cambia con el umbral de contacto.
-%   Fuente: 07_valor.
-% \figura{07_TODO}{TODO: ganancia esperada según el umbral de contacto.}
-
-\subsection{Punto de equilibrio}
-
-% TODO: a partir de cuántos clientes (o en cuánto tiempo) el modelo recupera su costo de implementación.
-%   Fuente: 07_valor.
-
-\subsection{Sensibilidad}
-
-% TODO: cómo cambian la ganancia y el punto de equilibrio en los extremos de los supuestos (ingreso bajo/alto,
-%   costo de contacto, éxito de la campaña). Fuente: 07_valor.
-
-\section{Los hallazgos, en corto}
-
-% TODO: lista numerada (enumerate) con los cuatro o cinco insights más importantes sobre el modelo y los
-%   resultados, en lenguaje de negocio. Sale de 03_exploracion, 05_evaluacion, 06_interpretabilidad y 07_valor.
-
+% =============================================================================
 \section{Recomendación}
 
-% TODO: recomendación final para FinAlpes en un recuadro \begin{prioridad}: implementar o no, a quién contactar
-%   (umbral o porcentaje de clientes) y con qué ganancia esperada. Después, cómo se usaría en la práctica
-%   (frecuencia de puntuación, seguimiento, reentrenamiento) y próximos pasos. Fuente: 07_valor.
-% TODO: línea final en gris con los notebooks donde está el detalle (01 a 07, nombres definitivos).
+\begin{prioridad}
+\textbf{Implementar el modelo como piloto.} Puntuar la base una vez al año y contactar a los clientes con riesgo
+mayor o igual a 0,33 (\apx16\,\% de la base, unos 3.100 clientes), reservando un grupo de control sin oferta. El
+piloto mide lo que hoy es un supuesto: el costo real de la oferta y cuántos clientes retiene. Antes de escalar, hay que
+reentrenar el modelo con clientes del propio banco y sumar datos de comportamiento.
+\end{prioridad}
 
+% =============================================================================
 \section{Limitaciones}
 
-% TODO: lista con los límites del modelo por sus condiciones de construcción y del valor que genera (Entregable
-%   5): datos europeos como proxy de un banco colombiano; foto en un momento sin dimensión temporal; supuestos
-%   paramétricos inciertos (costos e ingreso); asociación no es causalidad; desbalance; exclusión de variables
-%   sensibles y su costo en desempeño. Fuente: 04_modelado, 05_evaluacion, 06_interpretabilidad y 07_valor.
+\begin{itemize}
+  \item \textbf{Otro mercado.} El modelo aprendió de clientes europeos en un solo momento. No sabemos si acierta
+    igual con clientes colombianos ni con el paso del tiempo.
+  \item \textbf{Supuestos sin validar.} El costo de la oferta y la inversión vienen de ejemplos del curso, sin
+    costos recurrentes. Se usó el ingreso y no el margen, con un solo año de permanencia y el mismo 30\,\% de
+    éxito para todos.
+  \item \textbf{Asociación, no causalidad.} El modelo dice a quién contactar, no por qué se va el cliente ni si la
+    oferta lo hará quedarse.
+\end{itemize}
 
-\section{Declaración de uso de IA generativa}
-
-La declaración de uso de IA generativa (Entregable 7), con los modelos, el porcentaje de ayuda y los prompts
-empleados, está en el archivo \col{declaracion_IA.md} de la carpeta del taller.
-
-% =============================================================================
-% Anexo técnico (resumen de los Entregables 1 a 5)
-% =============================================================================
-\clearpage
-\renewcommand{\parteactual}{Anexo técnico}
-\etiqueta{Entregables 1 a 5}
-
-\section{Anexo técnico}
-
-% TODO: una línea: resumen de los notebooks, donde están el código, las tablas completas y todas las figuras.
-
-\subsection{Entendimiento y preparación de los datos}
-
-% TODO: diccionario breve de las 11 columnas (tipo, descripción, uso en el modelo), tabla de problemas de calidad
-%   con nivel, dimensión y tratamiento. Fuente: 01_entendimiento y 02_limpieza (Entregable 1).
-
-\subsection{Entrenamiento y selección del modelo}
-
-% TODO: tabla de modelos con la grilla de hiperparámetros, el mejor resultado en CV (PR-AUC) y el modelo elegido.
-%   Fuente: 04_modelado (Entregable 2).
-
-\subsection{Evaluación cuantitativa}
-
-% TODO: tabla completa de métricas en prueba para los tres modelos. Fuente: 05_evaluacion (Entregable 3).
-
-\subsection{Interpretación}
-
-% TODO: detalle de SHAP, ICE y LIME que no cabe en el cuerpo. Fuente: 06_interpretabilidad (Entregable 4).
-
-\subsection{Cálculo de valor}
-
-% TODO: fórmulas de la ganancia esperada y del punto de equilibrio, con la notación de cada supuesto. Fuente:
-%   07_valor (Entregable 5).
+{\small\color{gris}El detalle está en los notebooks \col{01_entendimiento} a \col{07_valor} del repositorio. La
+declaración de uso de IA generativa (Entregable 7) está en \col{declaracion_IA.md}.}
 
 \end{document}
