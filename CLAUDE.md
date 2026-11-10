@@ -24,11 +24,11 @@ Locally, the project uses the uv venv at `.venv/` (gitignored). It is registered
 pandas is pinned `<3`, because the notebooks' committed outputs come from pandas 2.x, and pandas 3 prints text columns
 as `str`.
 
-**nbstripout:** `.gitattributes` routes `Taller?2/**/*.ipynb` through the `nbstripout` git filter, so Taller 2
-notebooks are committed without outputs while local copies keep them. The filter command lives in each clone's
-`.git/config` (see the root README). Taller 1's notebooks are deliberately excluded: they are graded with their
-outputs. Graders read outputs on GitHub, so before the final delivery commit of a taller, remove its line from
-`.gitattributes`, re-run the notebooks, and commit them executed.
+**Notebook outputs:** all notebooks are committed **with their outputs**, because graders read them on GitHub. While
+Taller 2 was in progress, a `.gitattributes` file routed its notebooks through the `nbstripout` git filter. The file
+was removed for the final delivery. To reuse that workflow in a later taller, add
+`Taller?N/**/*.ipynb filter=nbstripout` while working (the filter command lives in each clone's `.git/config`), then
+remove the line, re-run the notebooks and commit them executed before delivery.
 
 When you add a dependency, add it to **both** `requirements.txt` and `environment.yml`. `pyarrow` is needed for
 the `.parquet` I/O.
